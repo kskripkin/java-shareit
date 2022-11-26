@@ -24,7 +24,7 @@ public class ValidateUser {
         if (user.getEmail() == null) {
             throw new ValidationException("Email not found");
         }
-        if (EmailValidator.getInstance().isValid(user.getEmail())) {
+        if (!EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Email not valid");
         }
         Stream<User> userStream = userDAO.getUsers().stream();
