@@ -15,7 +15,6 @@ import ru.practicum.shareit.user.model.User;
 public class UserController {
 
     private final UserService userService;
-    private final ValidateUser validateUser;
 
     @GetMapping
     public User getUser(@RequestBody int id) {
@@ -26,21 +25,18 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         log.info("POST /users");
-        validateUser.validate(user);
         return userService.createUser(user);
     }
 
-    @PatchMapping
-    public User updateUser(@RequestBody User user) {
-        log.info("PUT /users");
-        validateUser.validate(user);
-        return userService.updateUser(user);
+    @PatchMapping("{id}")
+    public User updateUser(@RequestBody User user, @PathVariable int id) {
+        log.info("PATCH /users");
+        return userService.updateUser(id, user);
     }
 
     @DeleteMapping
     public void deleteUser(@RequestBody int id) {
         log.info("DELETE /users");
-        validateUser.validate(id);
         userService.deleteUser(id);
     }
 }

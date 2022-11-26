@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.model.User;
 public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
+    private final ValidateUser validateUser;
 
     @Override
     public User getUser(int id) {
@@ -18,16 +19,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        validateUser.validate(user);
         return userDAO.createUser(user);
     }
 
     @Override
-    public User updateUser(User user) {
-        return userDAO.updateUser(user);
+    public User updateUser(int id, User user) {
+        validateUser.validate(user);
+        validateUser.validate(id);
+        return userDAO.updateUser(id, user);
     }
 
     @Override
     public void deleteUser(int id) {
+        validateUser.validate(id);
         userDAO.deleteUser(id);
     }
 }

@@ -27,9 +27,10 @@ public class UserDAO {
         return usersMap.get(user.getId());
     }
 
-    public User updateUser(User user) {
-        usersMap.put(user.getId(), user);
-        return usersMap.get(user.getId());
+    public User updateUser(int id, User user) {
+        user.setId(id);
+        usersMap.put(id, user);
+        return usersMap.get(id);
     }
 
     public void deleteUser(int id) {
