@@ -28,8 +28,14 @@ public class UserDAO {
     }
 
     public User updateUser(int id, User user) {
-        user.setId(id);
-        usersMap.put(id, user);
+        User sourceUser = usersMap.get(id);
+        if (user.getEmail() != null){
+            sourceUser.setEmail(user.getEmail());
+        }
+        if (user.getName() != null){
+            sourceUser.setName(user.getName());
+        }
+        usersMap.put(id, sourceUser);
         return usersMap.get(id);
     }
 

@@ -14,6 +14,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(int id) {
+        validateUser.validate(id);
         return userDAO.getUser(id);
     }
 
@@ -25,8 +26,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(int id, User user) {
-        validateUser.validate(user);
-        validateUser.validate(id);
         return userDAO.updateUser(id, user);
     }
 
