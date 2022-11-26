@@ -3,8 +3,10 @@ package ru.practicum.shareit.user.dao;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Component
 public class UserDAO {
@@ -14,6 +16,10 @@ public class UserDAO {
 
     public User getUser(int id) {
         return usersMap.get(id);
+    }
+
+    public Collection<User> getUsers() {
+        return usersMap.values();
     }
 
     public User createUser(User user) {
