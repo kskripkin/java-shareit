@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.model.User;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
+@Component
 public class ValidateUser {
 
     private final UserDAO userDAO;
