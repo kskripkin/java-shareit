@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.model.User;
 
 @RequiredArgsConstructor
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
 

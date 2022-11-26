@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
-public class ItemServiceImpl implements ItemService{
+public class ItemServiceImpl implements ItemService {
 
     private final ItemDAO itemDAO;
     private Item item;
