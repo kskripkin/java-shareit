@@ -3,6 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.exception.model.ConflictException;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.user.dao.UserDAO;
@@ -29,7 +30,7 @@ public class ValidateUser {
         }
         Stream<User> userStream = userDAO.getUsers().stream();
         userStream.filter(x -> x.getEmail().equals(user.getEmail())).findAny().ifPresent(x -> {
-            throw new ValidationException("Duplicate email");
+            throw new ConflictException("Duplicate email");
         });
     }
 

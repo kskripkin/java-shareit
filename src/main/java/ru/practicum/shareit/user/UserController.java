@@ -30,7 +30,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @PutMapping
+    @PatchMapping
     public User updateUser(@RequestBody User user) {
         log.info("PUT /users");
         validateUser.validate(user);
