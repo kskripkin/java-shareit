@@ -14,7 +14,7 @@ public class ItemDAO {
 
     private Map<Integer, Map<Integer, Item>> userItemMap = new HashMap<>();
     private Map<Integer, Item> itemMap;
-    private static int itemId = 1;
+    private int itemId = 1;
 
     public Item addItem(int userId, Item item) {
         item.setId(itemId++);
