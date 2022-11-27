@@ -15,7 +15,7 @@ import java.util.Collection;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/items", consumes="application/json", produces="application/json")
+@RequestMapping(value = "/items", consumes = "application/json", produces = "application/json")
 public class ItemController {
 
     private final ItemService itemService;
