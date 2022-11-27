@@ -66,7 +66,7 @@ public class ValidateUser {
     }
 
     public void validateUserOwnItem(int userId, int itemId) {
-        if (!itemDAO.showItems(userId).contains(itemId)){
+        if (!itemDAO.showItems(userId).contains(itemId)) {
             throw new NotFoundException("Item not found");
         }
     }
