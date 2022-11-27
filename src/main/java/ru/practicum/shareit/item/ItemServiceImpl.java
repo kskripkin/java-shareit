@@ -22,15 +22,22 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto addItem(String userId, ItemDto itemDto) {
+        item = ItemMapper.toItem(itemDto);
         integerUserId = Integer.parseInt(userId);
         validateUser.validate(integerUserId);
-        item = itemDAO.addItem(integerUserId, ItemMapper.toItem(itemDto));
+        validateUser.validateItem(item);
+        item = itemDAO.addItem(integerUserId, item);
         return ItemMapper.toItemDto(item);
     }
 
     @Override
     public ItemDto editItem(String userId, ItemDto itemDto, int itemId) {
-        item = itemDAO.editItem(Integer.parseInt(userId), ItemMapper.toItem(itemDto), itemId);
+        item = ItemMapper.toItem(itemDto);
+        integerUserId = Integer.parseInt(userId);
+        validateUser.validate(integerUserId);
+        validateUser.validateItem(item);
+        validateUser.validateUserOwnItem(integerUserId, itemId);
+        item = itemDAO.editItem(Integer.parseInt(userId), item, itemId);
         return ItemMapper.toItemDto(item);
     }
 
