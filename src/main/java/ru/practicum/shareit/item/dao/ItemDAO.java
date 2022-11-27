@@ -18,6 +18,7 @@ public class ItemDAO {
 
     public Item addItem(int userId, Item item) {
         item.setId(itemId++);
+        itemMap = new HashMap<>();
         itemMap.put(item.getId(), item);
         userItemMap.put(userId, itemMap);
         return userItemMap.get(userId).get(item.getId());
