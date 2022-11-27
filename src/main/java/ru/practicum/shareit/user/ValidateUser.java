@@ -11,9 +11,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,7 +64,8 @@ public class ValidateUser {
     }
 
     public void validateUserOwnItem(int userId, int itemId) {
-        if (!itemDAO.showItems(userId).contains(itemId)) {
+        Collection<Item> collectionUser = itemDAO.showItems(userId);
+        if (!collectionUser.contains(itemId)) {
             throw new NotFoundException("Item not found");
         }
     }
