@@ -55,10 +55,10 @@ public class ValidateUser {
         if (Objects.equals(item.isAvailable(), null)) {
             throw new ValidationException("Available not found");
         }
-        if (item.getName() == ""){
+        if (item.getName() == "") {
             throw new ValidationException("Name is empty");
         }
-        if (item.getDescription() == "" || item.getDescription() == null){
+        if (item.getDescription() == "" || item.getDescription() == null) {
             throw new ValidationException("Description is empty");
         }
     }
