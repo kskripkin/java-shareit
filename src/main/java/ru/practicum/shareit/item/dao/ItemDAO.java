@@ -32,8 +32,8 @@ public class ItemDAO {
         if (item.getName() != null) {
             sourceItem.setName(item.getName());
         }
-        if (!Objects.deepEquals(item.isAvailable(), null)) {
-            sourceItem.setAvailable(item.isAvailable());
+        if (item.getAvailable() != null) {
+            sourceItem.setAvailable(item.getAvailable());
         }
         itemMap.put(sourceItem.getId(), sourceItem);
         userItemMap.put(userId, itemMap);

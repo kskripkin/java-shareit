@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.validate;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -13,13 +13,12 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Component
-public class ValidateUser {
+public class Validate {
 
     private final UserDAO userDAO;
     private final ItemDAO itemDAO;
@@ -54,7 +53,7 @@ public class ValidateUser {
     }
 
     public void validateItem(Item item) {
-        if (Objects.deepEquals(item.isAvailable(), null)) {
+        if (item.getAvailable() == null) {
             throw new ValidationException("Available not found");
         }
         if (item.getName() == "") {

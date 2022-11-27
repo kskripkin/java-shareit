@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dao.ItemDAO;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.ValidateUser;
+import ru.practicum.shareit.validate.Validate;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -18,14 +18,14 @@ public class ItemServiceImpl implements ItemService {
     private final ItemDAO itemDAO;
     private Item item;
     private int integerUserId;
-    private final ValidateUser validateUser;
+    private final Validate validate;
 
     @Override
     public ItemDto addItem(String userId, ItemDto itemDto) {
         item = ItemMapper.toItem(itemDto);
         integerUserId = Integer.parseInt(userId);
-        validateUser.validate(integerUserId);
-        validateUser.validateItem(item);
+        validate.validate(integerUserId);
+        validate.validateItem(item);
         item = itemDAO.addItem(integerUserId, item);
         return ItemMapper.toItemDto(item);
     }
@@ -34,9 +34,9 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto editItem(String userId, ItemDto itemDto, int itemId) {
         item = ItemMapper.toItem(itemDto);
         integerUserId = Integer.parseInt(userId);
-        validateUser.validate(integerUserId);
-        validateUser.validateItem(item);
-        validateUser.validateUserOwnItem(integerUserId, itemId);
+        validate.validate(integerUserId);
+        validate.validateItem(item);
+        validate.validateUserOwnItem(integerUserId, itemId);
         item = itemDAO.editItem(Integer.parseInt(userId), item, itemId);
         return ItemMapper.toItemDto(item);
     }
