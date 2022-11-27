@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dao.ItemDAO;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.ValidateUser;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -16,16 +17,20 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemDAO itemDAO;
     private Item item;
+    private int integerUserId;
+    private final ValidateUser validateUser;
 
     @Override
     public ItemDto addItem(String userId, ItemDto itemDto) {
-        item = itemDAO.addItem(Integer.parseInt(userId), ItemMapper.toItem(itemDto));
+        integerUserId = Integer.parseInt(userId);
+        validateUser.validate(integerUserId);
+        item = itemDAO.addItem(integerUserId, ItemMapper.toItem(itemDto));
         return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public ItemDto editItem(String userId, ItemDto itemDto) {
-        item = itemDAO.editItem(Integer.parseInt(userId), ItemMapper.toItem(itemDto));
+    public ItemDto editItem(String userId, ItemDto itemDto, int itemId) {
+        item = itemDAO.editItem(Integer.parseInt(userId), ItemMapper.toItem(itemDto), itemId);
         return ItemMapper.toItemDto(item);
     }
 

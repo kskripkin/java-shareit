@@ -15,21 +15,21 @@ import java.util.Collection;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/items", consumes = "application/json", produces = "application/json")
+@RequestMapping(value = "/items")
 public class ItemController {
 
     private final ItemService itemService;
 
     @PostMapping
-    public ItemDto addItem(@RequestBody Item item, @RequestHeader MultiValueMap<String, String> headers) {
-        log.info("POST /items X-Sharer-User-Id={}", headers.getFirst("x-sharer-user-id"));
-        return itemService.addItem(headers.getFirst("x-sharer-user-id"), null);
+    public ItemDto addItem(@RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") String userId) {
+        log.info("POST /items X-Sharer-User-Id={}", userId);
+        return itemService.addItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto editItem(@RequestBody ItemDto itemDto, @PathVariable int itemId, @RequestHeader("X-Sharer-User-Id") String userId) {
         log.info("PATCH /items/{} X-Sharer-User-Id={}", itemId, userId);
-        return itemService.editItem(userId, itemDto);
+        return itemService.editItem(userId, itemDto, itemId);
     }
 
     @GetMapping("/{itemId}")

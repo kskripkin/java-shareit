@@ -6,11 +6,13 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.model.ConflictException;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.exception.model.ValidationException;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,6 +48,18 @@ public class ValidateUser {
         userList = userStream.filter(x -> x.getId() == id).collect(Collectors.toList());
         if (userList.size() == 0) {
             throw new NotFoundException("User not found");
+        }
+    }
+
+    public void validateItem(Item item) {
+        if (Objects.equals(item.isAvailable(), null)) {
+            throw new ValidationException("Available not found");
+        }
+        if (item.getName() == ""){
+            throw new ValidationException("Name is empty");
+        }
+        if (item.getDescription() == "" || item.getDescription() == null){
+            throw new ValidationException("Description is empty");
         }
     }
 }

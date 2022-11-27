@@ -8,7 +8,7 @@ interface ItemService {
 
     ItemDto addItem(String userId, ItemDto itemDto);
 
-    ItemDto editItem(String userId, ItemDto itemDto);
+    ItemDto editItem(String userId, ItemDto itemDto, int itemId);
 
     ItemDto showItem(String userId, int itemId);
 
