@@ -18,31 +18,31 @@ public class ItemServiceImpl implements ItemService {
     private Item item;
 
     @Override
-    public ItemDto addItem(int userId, ItemDto itemDto) {
-        item = itemDAO.addItem(userId, ItemMapper.toItem(itemDto));
+    public ItemDto addItem(String userId, ItemDto itemDto) {
+        item = itemDAO.addItem(Integer.parseInt(userId), ItemMapper.toItem(itemDto));
         return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public ItemDto editItem(int userId, ItemDto itemDto) {
-        item = itemDAO.editItem(userId, ItemMapper.toItem(itemDto));
+    public ItemDto editItem(String userId, ItemDto itemDto) {
+        item = itemDAO.editItem(Integer.parseInt(userId), ItemMapper.toItem(itemDto));
         return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public ItemDto showItem(int userId, int itemId) {
-        return ItemMapper.toItemDto(itemDAO.showItem(userId, itemId));
+    public ItemDto showItem(String userId, int itemId) {
+        return ItemMapper.toItemDto(itemDAO.showItem(Integer.parseInt(userId), itemId));
     }
 
     @Override
-    public Collection<ItemDto> showItems(int userId) {
-        Stream<Item> itemStream = itemDAO.showItems(userId).stream();
+    public Collection<ItemDto> showItems(String userId) {
+        Stream<Item> itemStream = itemDAO.showItems(Integer.parseInt(userId)).stream();
         return itemStream.map(x -> ItemMapper.toItemDto(x)).collect(Collectors.toList());
     }
 
     @Override
-    public Collection<ItemDto> searchItems(int userId, String text) {
-        Stream<Item> itemStream = itemDAO.searchItems(userId, text).stream();
+    public Collection<ItemDto> searchItems(String userId, String text) {
+        Stream<Item> itemStream = itemDAO.searchItems(Integer.parseInt(userId), text).stream();
         return itemStream.map(x -> ItemMapper.toItemDto(x)).collect(Collectors.toList());
     }
 }

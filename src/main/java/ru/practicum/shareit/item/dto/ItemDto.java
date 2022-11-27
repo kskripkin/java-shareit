@@ -18,4 +18,10 @@ public class ItemDto {
         this.available = available;
         this.request = request;
     }
+
+    public ItemDto(String name, String description, boolean available) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.Collection;
+
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,13 +21,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Collection<User> getUsers() {
+        return userDAO.getUsers();
+    }
+
+    @Override
     public User createUser(User user) {
-        validateUser.validate(user);
+        validateUser.validateCreateUser(user);
         return userDAO.createUser(user);
     }
 
     @Override
     public User updateUser(int id, User user) {
+        validateUser.validateUpdateUser(user);
         return userDAO.updateUser(id, user);
     }
 

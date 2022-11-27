@@ -6,14 +6,14 @@ import java.util.Collection;
 
 interface ItemService {
 
-    ItemDto addItem(int userId, ItemDto itemDto);
+    ItemDto addItem(String userId, ItemDto itemDto);
 
-    ItemDto editItem(int userId, ItemDto itemDto);
+    ItemDto editItem(String userId, ItemDto itemDto);
 
-    ItemDto showItem(int userId, int itemId);
+    ItemDto showItem(String userId, int itemId);
 
-    Collection<ItemDto> showItems(int userId);
+    Collection<ItemDto> showItems(String userId);
 
-    Collection<ItemDto> searchItems(int userId, String text);
+    Collection<ItemDto> searchItems(String userId, String text);
 
 }

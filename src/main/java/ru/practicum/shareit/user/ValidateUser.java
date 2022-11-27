@@ -21,11 +21,18 @@ public class ValidateUser {
     private final UserDAO userDAO;
     private List<User> userList = new ArrayList<>();
 
-    public void validate(User user) {
-        if (user.getEmail() == null) {
-            throw new ValidationException("Email not found");
+    public void validateCreateUser(User user) {
+        if (user.getEmail() == null || !EmailValidator.getInstance().isValid(user.getEmail())) {
+            throw new ValidationException("Email not valid");
         }
-        if (!EmailValidator.getInstance().isValid(user.getEmail())) {
+        Stream<User> userStream = userDAO.getUsers().stream();
+        userStream.filter(x -> x.getEmail().equals(user.getEmail())).findAny().ifPresent(x -> {
+            throw new ConflictException("Duplicate email");
+        });
+    }
+
+    public void validateUpdateUser(User user) {
+        if (user.getEmail() != null && !EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Email not valid");
         }
         Stream<User> userStream = userDAO.getUsers().stream();

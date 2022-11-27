@@ -15,10 +15,10 @@ public class Item {
     private boolean available;
     private User owner;
     private Booking request;
-
-    public Item(String name, String description, boolean available) {
-        this.name = name;
-        this.description = description;
-        this.available = available;
-    }
+//
+//    public Item(String name, String description, boolean available) {
+//        this.name = name;
+//        this.description = description;
+//        this.available = available;
+//    }
 }

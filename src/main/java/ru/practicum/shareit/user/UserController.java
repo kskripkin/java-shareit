@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.Collection;
+
 /**
  * TODO Sprint add-controllers.
  */
@@ -18,8 +20,14 @@ public class UserController {
 
     @GetMapping("{id}")
     public User getUser(@PathVariable int id) {
-        log.info("GET /users");
+        log.info("GET /users/{}", id);
         return userService.getUser(id);
+    }
+
+    @GetMapping
+    public Collection<User> getUsers() {
+        log.info("GET /users");
+        return userService.getUsers();
     }
 
     @PostMapping
