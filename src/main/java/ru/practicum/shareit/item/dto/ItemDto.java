@@ -9,21 +9,23 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class ItemDto {
+    private int id;
     private String name;
     private String description;
     private boolean available;
     private Integer request;
 
-    public ItemDto(String name, String description, boolean available, Integer request) {
-        this.name = name;
-        this.description = description;
-        this.available = available;
-        this.request = request;
-    }
-
     public ItemDto(String name, String description, boolean available) {
         this.name = name;
         this.description = description;
         this.available = available;
+    }
+
+    public ItemDto(int id, String name, String description, boolean available, Integer request) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.request = request;
     }
 }
