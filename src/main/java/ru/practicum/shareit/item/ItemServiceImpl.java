@@ -58,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<ItemDto> searchItems(String userId, String text) {
         validate.validate(integerUserId);
-        if (text == "") {
+        if (text.equals("")) {
             return new ArrayList<>();
         }
         Stream<Item> itemStream = itemDAO.searchItems(text.toLowerCase(Locale.ROOT)).stream();
