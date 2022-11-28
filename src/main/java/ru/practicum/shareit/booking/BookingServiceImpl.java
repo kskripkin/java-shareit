@@ -8,7 +8,7 @@ import ru.practicum.shareit.validate.Validate;
 
 @RequiredArgsConstructor
 @Service
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
 
     private final ItemDAO itemDAO;
     private final Validate validate;
