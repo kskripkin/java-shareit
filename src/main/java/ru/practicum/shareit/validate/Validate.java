@@ -7,6 +7,7 @@ import ru.practicum.shareit.exception.model.ConflictException;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemDAO;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserDAO;
 import ru.practicum.shareit.user.model.User;
@@ -64,10 +65,25 @@ public class Validate {
         }
     }
 
+    public void validateItemDto(ItemDto itemDto) {
+        if (itemDto.getAvailable() == null) {
+            throw new ValidationException("Available not found");
+        }
+        if (itemDto.getName() == "") {
+            throw new ValidationException("Name is empty");
+        }
+        if (itemDto.getDescription() == "" || itemDto.getDescription() == null) {
+            throw new ValidationException("Description is empty");
+        }
+    }
+
     public void validateUserOwnItem(int userId, int itemId) {
+        if (!itemDAO.getMapUsersAndItems().containsKey(userId)) {
+            throw new NotFoundException("Item for user not found");
+        }
         Stream<Item> itemStream = itemDAO.showItems(userId).stream();
         if (itemStream.filter(x -> x.getId() == itemId).collect(Collectors.toList()).size() == 0) {
-            throw new NotFoundException("Item not found");
+            throw new NotFoundException("Item does not belong to the user");
         }
     }
 }

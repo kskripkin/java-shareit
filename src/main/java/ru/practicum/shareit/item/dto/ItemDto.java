@@ -1,27 +1,27 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
  * TODO Sprint add-controllers.
  */
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class ItemDto {
     private int id;
     private String name;
     private String description;
-    private boolean available;
+    private Boolean available;
     private Integer request;
 
-    public ItemDto(String name, String description, boolean available) {
+    public ItemDto(String name, String description, Boolean available) {
         this.name = name;
         this.description = description;
         this.available = available;
     }
 
-    public ItemDto(int id, String name, String description, boolean available, Integer request) {
+    public ItemDto(int id, String name, String description, Boolean available, Integer request) {
         this.id = id;
         this.name = name;
         this.description = description;

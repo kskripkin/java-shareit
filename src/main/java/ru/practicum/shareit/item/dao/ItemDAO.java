@@ -2,11 +2,11 @@ package ru.practicum.shareit.item.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -40,18 +40,47 @@ public class ItemDAO {
         return userItemMap.get(userId).get(itemId);
     }
 
-    public Item showItem(int userId, int itemId) {
-        return userItemMap.get(userId).get(itemId);
+    public Item showItem(int itemId) {
+        for (Map.Entry<Integer, Map<Integer, Item>> entryUserMap : userItemMap.entrySet()) {
+            for (Map.Entry<Integer, Item> entryItemMap : entryUserMap.getValue().entrySet()) {
+                if (entryItemMap.getKey() == itemId) {
+                    return entryItemMap.getValue();
+                }
+            }
+        }
+        throw new NotFoundException("User not found");
     }
 
     public Collection<Item> showItems(int userId) {
         return userItemMap.get(userId).values();
     }
 
-    public Collection<Item> searchItems(int userId, String text) {
-        Stream<Map.Entry<Integer, Item>> stream = userItemMap.get(userId).entrySet().stream();
-        List<Item> itemList = stream.filter(x -> x.getValue().getName().contains(text) == true ||
-                x.getValue().getDescription().contains(text) == true).map(x -> x.getValue()).collect(Collectors.toList());
+    public Collection<Item> searchItems(String text) {
+        List<Item> itemList = new ArrayList<>();
+        for (Map.Entry<Integer, Map<Integer, Item>> entryUserMap : userItemMap.entrySet()) {
+            for (Map.Entry<Integer, Item> entryItemMap : entryUserMap.getValue().entrySet()) {
+                if (entryItemMap.getValue().getAvailable() == true &&
+                        (entryItemMap.getValue().getName().toLowerCase(Locale.ROOT).contains(text) ||
+                        entryItemMap.getValue().getDescription().toLowerCase(Locale.ROOT).contains(text))) {
+                    itemList.add(entryItemMap.getValue());
+                }
+            }
+        }
         return itemList;
+    }
+
+    public Map<Integer, Map<Integer, Item>> getMapUsersAndItems() {
+        return userItemMap;
+    }
+
+    public void booking(Booking booking) {
+        for (Map.Entry<Integer, Map<Integer, Item>> entryUserMap : userItemMap.entrySet()) {
+            for (Map.Entry<Integer, Item> entryItemMap : entryUserMap.getValue().entrySet()) {
+                if (entryItemMap.getKey() == booking.getItem().getId()) {
+                    entryItemMap.getValue().setAvailable(false);
+                    entryItemMap.getValue().setRequest(booking);
+                }
+            }
+        }
     }
 }

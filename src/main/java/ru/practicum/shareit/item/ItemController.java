@@ -7,9 +7,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -42,8 +39,8 @@ public class ItemController {
         return itemService.showItems(userId);
     }
 
-    @GetMapping("/search?text={text}")
-    public Collection<ItemDto> searchItems(@PathVariable String text, @RequestHeader("X-Sharer-User-Id") String userId) {
+    @GetMapping("/search")
+    public Collection<ItemDto> searchItems(@RequestParam String text, @RequestHeader("X-Sharer-User-Id") String userId) {
         log.info("GET /items/search?text={} X-Sharer-User-Id={}", text, userId);
         return itemService.searchItems(userId, text);
     }

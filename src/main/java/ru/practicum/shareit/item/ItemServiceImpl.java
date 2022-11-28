@@ -7,7 +7,9 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.validate.Validate;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,20 +24,19 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto addItem(String userId, ItemDto itemDto) {
+        validate.validateItemDto(itemDto);
         item = ItemMapper.toItem(itemDto);
         integerUserId = Integer.parseInt(userId);
         validate.validate(integerUserId);
-        validate.validateItem(item);
         item = itemDAO.addItem(integerUserId, item);
         return ItemMapper.toItemDto(item);
     }
 
     @Override
     public ItemDto editItem(String userId, ItemDto itemDto, int itemId) {
-        item = ItemMapper.toItem(itemDto);
         integerUserId = Integer.parseInt(userId);
         validate.validate(integerUserId);
-        validate.validateItem(item);
+        item = ItemMapper.toItem(itemDto);
         validate.validateUserOwnItem(integerUserId, itemId);
         item = itemDAO.editItem(Integer.parseInt(userId), item, itemId);
         return ItemMapper.toItemDto(item);
@@ -43,7 +44,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto showItem(String userId, int itemId) {
-        return ItemMapper.toItemDto(itemDAO.showItem(Integer.parseInt(userId), itemId));
+        integerUserId = Integer.parseInt(userId);
+        validate.validate(integerUserId);
+        return ItemMapper.toItemDto(itemDAO.showItem(itemId));
     }
 
     @Override
@@ -54,7 +57,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemDto> searchItems(String userId, String text) {
-        Stream<Item> itemStream = itemDAO.searchItems(Integer.parseInt(userId), text).stream();
+        validate.validate(integerUserId);
+        if (text == "") {
+            return new ArrayList<>();
+        }
+        Stream<Item> itemStream = itemDAO.searchItems(text.toLowerCase(Locale.ROOT)).stream();
         return itemStream.map(x -> ItemMapper.toItemDto(x)).collect(Collectors.toList());
     }
 }
