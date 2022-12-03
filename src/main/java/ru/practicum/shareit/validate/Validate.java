@@ -36,9 +36,6 @@ public class Validate {
         if (user.getEmail() != null && !EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Email not valid");
         }
-        if (!(userRepository.findByEmailContainingIgnoreCase(user.getEmail()) == null)) {
-            throw new ConflictException("Duplicate email");
-        }
     }
 
     public void validate(long id) {
