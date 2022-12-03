@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ItemDto {
-    private int id;
+    private long id;
     private String name;
     private String description;
     private Boolean available;
-    private Integer request;
+    private long request;
 
     public ItemDto(String name, String description, Boolean available) {
         this.name = name;
@@ -21,7 +21,7 @@ public class ItemDto {
         this.available = available;
     }
 
-    public ItemDto(int id, String name, String description, Boolean available, Integer request) {
+    public ItemDto(long id, String name, String description, Boolean available, long request) {
         this.id = id;
         this.name = name;
         this.description = description;

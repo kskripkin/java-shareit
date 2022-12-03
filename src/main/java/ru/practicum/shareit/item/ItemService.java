@@ -8,9 +8,9 @@ interface ItemService {
 
     ItemDto addItem(String userId, ItemDto itemDto);
 
-    ItemDto editItem(String userId, ItemDto itemDto, int itemId);
+    ItemDto editItem(String userId, ItemDto itemDto, long itemId);
 
-    ItemDto showItem(String userId, int itemId);
+    ItemDto showItem(String userId, long itemId);
 
     Collection<ItemDto> showItems(String userId);
 

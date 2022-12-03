@@ -6,49 +6,43 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.model.ConflictException;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.exception.model.ValidationException;
-import ru.practicum.shareit.item.dao.ItemDAO;
+import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.dao.UserDAO;
+import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Component
 public class Validate {
 
-    private final UserDAO userDAO;
-    private final ItemDAO itemDAO;
+    private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
     private List<User> userList = new ArrayList<>();
 
     public void validateCreateUser(User user) {
         if (user.getEmail() == null || !EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Email not valid");
         }
-        Stream<User> userStream = userDAO.getUsers().stream();
-        userStream.filter(x -> x.getEmail().equals(user.getEmail())).findAny().ifPresent(x -> {
+        if (userRepository.findByEmailContainingIgnoreCase(user.getEmail()).size() != 0) {
             throw new ConflictException("Duplicate email");
-        });
+        }
     }
 
     public void validateUpdateUser(User user) {
         if (user.getEmail() != null && !EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Email not valid");
         }
-        Stream<User> userStream = userDAO.getUsers().stream();
-        userStream.filter(x -> x.getEmail().equals(user.getEmail())).findAny().ifPresent(x -> {
+        if (!(userRepository.findByEmailContainingIgnoreCase(user.getEmail()) == null)) {
             throw new ConflictException("Duplicate email");
-        });
+        }
     }
 
-    public void validate(int id) {
-        Stream<User> userStream = userDAO.getUsers().stream();
-        userList = userStream.filter(x -> x.getId() == id).collect(Collectors.toList());
-        if (userList.size() == 0) {
+    public void validate(long id) {
+        if (userRepository.getById(id) == null) {
             throw new NotFoundException("User not found");
         }
     }
@@ -77,12 +71,8 @@ public class Validate {
         }
     }
 
-    public void validateUserOwnItem(int userId, int itemId) {
-        if (!itemDAO.getMapUsersAndItems().containsKey(userId)) {
-            throw new NotFoundException("Item for user not found");
-        }
-        Stream<Item> itemStream = itemDAO.showItems(userId).stream();
-        if (itemStream.filter(x -> x.getId() == itemId).collect(Collectors.toList()).size() == 0) {
+    public void validateUserOwnItem(long userId, long itemId) {
+        if (itemRepository.findByUserIdAndItemId(userId, itemId) == null) {
             throw new NotFoundException("Item does not belong to the user");
         }
     }
