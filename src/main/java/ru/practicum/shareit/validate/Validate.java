@@ -38,7 +38,7 @@ public class Validate {
     }
 
     public void validate(long id) {
-        if (userRepository.getById(id) == null) {
+        if (userRepository.findById(id).isEmpty()) {
             throw new NotFoundException("User not found");
         }
     }
