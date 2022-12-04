@@ -39,7 +39,8 @@ public class UserController {
     @PatchMapping("{id}")
     public User updateUser(@RequestBody User user, @PathVariable long id) {
         log.info("PATCH /users/{}", id);
-        return userService.updateUser(id, user);
+        User user1 = userService.updateUser(id, user);
+        return user1;
     }
 
     @DeleteMapping("{id}")

@@ -36,6 +36,13 @@ public class UserServiceImpl implements UserService {
     public User updateUser(long id, User user) {
         validate.validateUpdateUser(user);
         user.setId(id);
+        User userSource = userRepository.getById(id);
+        if (user.getName() == null) {
+            user.setName(userSource.getName());
+        }
+        if (user.getEmail() == null) {
+            user.setEmail(userSource.getEmail());
+        }
         return userRepository.save(user);
     }
 
