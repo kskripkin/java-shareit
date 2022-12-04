@@ -38,13 +38,13 @@ public class UserController {
 
     @PatchMapping("{id}")
     public User updateUser(@RequestBody User user, @PathVariable long id) {
-        log.info("PATCH /users");
+        log.info("PATCH /users/{}", id);
         return userService.updateUser(id, user);
     }
 
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable long id) {
-        log.info("DELETE /users");
+        log.info("DELETE /users/{}", id);
         userService.deleteUser(id);
     }
 }

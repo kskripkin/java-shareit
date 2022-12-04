@@ -35,6 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(long id, User user) {
         validate.validateUpdateUser(user);
+        user.setId(id);
         return userRepository.save(user);
     }
 
