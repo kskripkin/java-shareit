@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "bookings")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Booking {
 
     @Id
@@ -15,10 +17,10 @@ public class Booking {
     private long id;
 
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    private LocalDateTime start;
 
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private LocalDateTime end;
 
     @Column(name = "item_id", nullable = false)
     private long itemId;
@@ -28,4 +30,7 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     private BookingState status;
+
+    @Column(name = "item_name")
+    private String itemName;
 }

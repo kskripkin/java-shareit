@@ -3,6 +3,7 @@ package ru.practicum.shareit.validate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
@@ -20,6 +21,7 @@ public class Validate {
 
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final BookingRepository bookingRepository;
     private List<User> userList = new ArrayList<>();
 
     public void validateCreateUser(User user) {
@@ -40,6 +42,12 @@ public class Validate {
     public void validate(long id) {
         if (userRepository.findById(id).isEmpty()) {
             throw new NotFoundException("User not found");
+        }
+    }
+
+    public void validateShowItem(long id) {
+        if (itemRepository.findById(id).isEmpty()) {
+            throw new NotFoundException("Item not found");
         }
     }
 
@@ -70,6 +78,26 @@ public class Validate {
     public void validateUserOwnItem(long userId, long itemId) {
         if (itemRepository.findByUserIdAndItemId(userId, itemId) == null) {
             throw new NotFoundException("Item does not belong to the user");
+        }
+    }
+
+    public void validateUserOwnItemOrBooker(long bookingId, long userId) {
+        if (bookingRepository.getById(bookingId).getBookerId() == userId ||
+        itemRepository.getById(bookingRepository.getById(bookingId).getItemId()).getOwnerId() == userId) {
+        } else {
+            throw new ValidationException("User has nothing to do with the thing");
+        }
+    }
+
+    public void booking(long bookingId) {
+        if (bookingRepository.findById(bookingId).isEmpty()) {
+            throw new NotFoundException("Booking not found");
+        }
+    }
+
+    public void validateBookingAvailable(long itemId) {
+        if (itemRepository.getById(itemId).getAvailable() == false) {
+            throw new ValidationException("Item not available");
         }
     }
 }

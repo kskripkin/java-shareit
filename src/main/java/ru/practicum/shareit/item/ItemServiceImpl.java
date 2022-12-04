@@ -9,6 +9,7 @@ import ru.practicum.shareit.validate.Validate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,26 +34,34 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto editItem(String userId, ItemDto itemDto, long itemId) {
-        item.setId(itemId);
         integerUserId = Integer.parseInt(userId);
         validate.validate(integerUserId);
         item = ItemMapper.toItem(itemDto);
         validate.validateUserOwnItem(integerUserId, itemId);
-        item.setOwnerId(integerUserId);
+        item.setId(itemId);
+        Item itemSource = itemRepository.getById(itemId);
+        item.setOwnerId(itemSource.getOwnerId());
+        if (item.getName() == null) {
+            item.setName(itemSource.getName());
+        }
+        if (item.getDescription() == null) {
+            item.setDescription(itemSource.getDescription());
+        }
+        if (item.getAvailable() == null) {
+            item.setAvailable(itemSource.getAvailable());
+        }
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
     public ItemDto showItem(String userId, long itemId) {
-        integerUserId = Integer.parseInt(userId);
-        validate.validate(integerUserId);
+        validate.validateShowItem(itemId);
         return ItemMapper.toItemDto(itemRepository.getById(itemId));
     }
 
     @Override
     public Collection<ItemDto> showItems(String userId) {
-        itemRepository.findAll();
-        Stream<Item> itemStream = itemRepository.findAll().stream();
+        Stream<Item> itemStream = itemRepository.findItemsByUserId(Integer.parseInt(userId)).stream();
         return itemStream.map(x -> ItemMapper.toItemDto(x)).collect(Collectors.toList());
     }
 
@@ -62,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
         if (text.equals("")) {
             return new ArrayList<>();
         }
-        Stream<Item> itemStream = itemRepository.findByText(text).stream();
+        Stream<Item> itemStream = itemRepository.findByText(text.toLowerCase(Locale.ROOT)).stream();
         return itemStream.map(x -> ItemMapper.toItemDto(x)).collect(Collectors.toList());
     }
 }
