@@ -27,9 +27,9 @@ public class Validate {
         if (user.getEmail() == null || !EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Email not valid");
         }
-        if (userRepository.findByEmailContainingIgnoreCase(user.getEmail()).size() != 0) {
-            throw new ConflictException("Duplicate email");
-        }
+//        if (userRepository.findByEmailContainingIgnoreCase(user.getEmail()).size() != 0) {
+//            throw new ConflictException("Duplicate email");
+//        }
     }
 
     public void validateUpdateUser(User user) {
