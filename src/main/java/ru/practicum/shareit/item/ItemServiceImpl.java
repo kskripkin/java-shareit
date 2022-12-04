@@ -26,16 +26,19 @@ public class ItemServiceImpl implements ItemService {
         validate.validateItemDto(itemDto);
         item = ItemMapper.toItem(itemDto);
         integerUserId = Integer.parseInt(userId);
+        item.setOwnerId(integerUserId);
         validate.validate(integerUserId);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
     public ItemDto editItem(String userId, ItemDto itemDto, long itemId) {
+        item.setId(itemId);
         integerUserId = Integer.parseInt(userId);
         validate.validate(integerUserId);
         item = ItemMapper.toItem(itemDto);
         validate.validateUserOwnItem(integerUserId, itemId);
+        item.setOwnerId(integerUserId);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
