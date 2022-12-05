@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dao.BookingRepository;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
@@ -12,6 +13,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +100,15 @@ public class Validate {
     public void validateBookingAvailable(long itemId) {
         if (itemRepository.getById(itemId).getAvailable() == false) {
             throw new ValidationException("Item not available");
+        }
+    }
+
+    public void bookingTime(Booking booking) {
+        if (booking.getEnd().isBefore(booking.getStart())) {
+            throw new ValidationException("End time before start time");
+        }
+        if (booking.getEnd().isBefore(LocalDateTime.now()) || booking.getStart().isBefore(LocalDateTime.now().minusMinutes(1))) {
+            throw new ValidationException("End or start time before now");
         }
     }
 }

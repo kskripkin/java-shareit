@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.item.model.Item;
 
@@ -23,12 +24,14 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "where owner_id = ?1", nativeQuery = true)
     List<Item> findItemsByUserId(long userId);
 
+    @Modifying
     @Query(value = "update items " +
             "set request_booking_id = ?1, " +
             "available = false " +
             "where id = ?2", nativeQuery = true)
     void booking(long bookId, long itemId);
 
+    @Modifying
     @Query(value = "update items " +
             "set available = ?1 " +
             "where id = ?2", nativeQuery = true)

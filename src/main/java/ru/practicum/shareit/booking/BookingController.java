@@ -21,8 +21,6 @@ public class BookingController {
     public Booking booking(@RequestBody Booking booking, @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("POST /bookings X-Sharer-User-Id={}", userId);
         booking.setBookerId(userId);
-        booking.setStatus(BookingState.WAITING);
-        booking.setItemName("lol");
         return bookingService.booking(userId, booking);
     }
 

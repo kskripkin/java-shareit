@@ -27,7 +27,9 @@ public class BookingServiceImpl implements BookingService {
         validate.validate(userId);
         validate.validateShowItem(booking.getItemId());
         validate.validateBookingAvailable(booking.getItemId());
+        validate.bookingTime(booking);
         booking.setStatus(BookingState.WAITING);
+        booking.setItemName(itemRepository.getById(booking.getItemId()).getName());
         Booking bookingFinal = bookingRepository.save(booking);
         itemRepository.booking(bookingFinal.getId(), bookingFinal.getItemId());
         return bookingFinal;
