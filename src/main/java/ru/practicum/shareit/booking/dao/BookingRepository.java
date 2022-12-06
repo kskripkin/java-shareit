@@ -1,7 +1,9 @@
 package ru.practicum.shareit.booking.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.util.Collection;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
+    @Modifying
     @Query(value = "update bookings " +
             "set status = ?1 " +
             "where id = ?2", nativeQuery = true)

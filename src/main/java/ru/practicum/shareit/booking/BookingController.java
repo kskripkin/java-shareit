@@ -3,9 +3,8 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.BookingState;
-import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.Collection;
 
@@ -18,20 +17,21 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public Booking booking(@RequestBody Booking booking, @RequestHeader("X-Sharer-User-Id") long userId) {
+    public BookingDto booking(@RequestBody Booking booking, @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("POST /bookings X-Sharer-User-Id={}", userId);
-        booking.setBookerId(userId);
         return bookingService.booking(userId, booking);
     }
 
     @PatchMapping("/{bookingId}")
-    public void bookingApproveOrDeclined(@PathVariable int bookingId, @RequestParam String approved, @RequestHeader("X-Sharer-User-Id") long userId) {
+    public BookingDto bookingApproveOrDeclined(@PathVariable int bookingId, @RequestParam boolean approved, @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("PATCH /bookings/{}?approved={} X-Sharer-User-Id={}", bookingId, approved, userId);
         bookingService.bookingApproveOrDeclined(bookingId, approved, userId);
+        BookingDto booking = getBooking(bookingId, userId);
+        return getBooking(bookingId, userId);
     }
 
     @GetMapping("/{bookingId}")
-    public Booking getBooking(@PathVariable int bookingId, @RequestHeader("X-Sharer-User-Id") long userId) {
+    public BookingDto getBooking(@PathVariable int bookingId, @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("GET /bookings/{} X-Sharer-User-Id={}", bookingId, userId);
         return bookingService.getBooking(bookingId, userId);
     }

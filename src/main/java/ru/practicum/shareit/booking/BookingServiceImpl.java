@@ -1,9 +1,11 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingRepository;
+import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.exception.model.NotFoundException;
@@ -13,6 +15,7 @@ import ru.practicum.shareit.validate.Validate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -20,38 +23,41 @@ public class BookingServiceImpl implements BookingService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final Validate validate;
+    private final BookingMapper bookingMapper;
 
     @Override
     @Transactional
-    public Booking booking(long userId, Booking booking) {
+    public BookingDto booking(long userId, Booking booking) {
         validate.validate(userId);
         validate.validateShowItem(booking.getItemId());
         validate.validateBookingAvailable(booking.getItemId());
         validate.bookingTime(booking);
         booking.setStatus(BookingState.WAITING);
+        booking.setBookerId(userId);
         booking.setItemName(itemRepository.getById(booking.getItemId()).getName());
         Booking bookingFinal = bookingRepository.save(booking);
         itemRepository.booking(bookingFinal.getId(), bookingFinal.getItemId());
-        return bookingFinal;
+        return bookingMapper.toBookingDto(bookingFinal);
     }
 
     @Override
-    public void bookingApproveOrDeclined(long bookingId, String approved, long userId) {
+    @Transactional
+    public void bookingApproveOrDeclined(long bookingId, boolean status, long userId) {
         validate.validate(userId);
         validate.booking(bookingId);
         validate.validateUserOwnItem(userId, bookingRepository.getById(bookingId).getItemId());
-        bookingRepository.changeStatus(approved, bookingId);
-        if (approved.equals(BookingState.APPROVED)) {
+        if (status == true) {
+            bookingRepository.changeStatus(BookingState.APPROVED.toString(), bookingId);
             itemRepository.changeAvailable(false, bookingRepository.getById(bookingId).getItemId());
         }
     }
 
     @Override
-    public Booking getBooking(long bookingId, long userId) {
+    public BookingDto getBooking(long bookingId, long userId) {
         validate.validate(userId);
         validate.booking(bookingId);
         validate.validateUserOwnItemOrBooker(bookingId, userId);
-        return bookingRepository.getById(bookingId);
+        return bookingMapper.toBookingDto(bookingRepository.getById(bookingId));
     }
 
     @Override
