@@ -85,6 +85,7 @@ public class Validate {
     public void validateUserOwnItemOrBooker(long bookingId, long userId) {
         if (bookingRepository.getById(bookingId).getBookerId() == userId ||
                 itemRepository.getById(bookingRepository.getById(bookingId).getItemId()).getOwnerId() == userId) {
+            System.out.println("OK");
         } else {
             throw new NotFoundException("User has nothing to do with the thing");
         }
