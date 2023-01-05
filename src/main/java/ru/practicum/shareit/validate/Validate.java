@@ -5,17 +5,17 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -24,7 +24,6 @@ public class Validate {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
-    private List<User> userList = new ArrayList<>();
 
     public void validateCreateUser(User user) {
         if (user.getEmail() == null || !EmailValidator.getInstance().isValid(user.getEmail())) {
@@ -85,9 +84,9 @@ public class Validate {
 
     public void validateUserOwnItemOrBooker(long bookingId, long userId) {
         if (bookingRepository.getById(bookingId).getBookerId() == userId ||
-        itemRepository.getById(bookingRepository.getById(bookingId).getItemId()).getOwnerId() == userId) {
+                itemRepository.getById(bookingRepository.getById(bookingId).getItemId()).getOwnerId() == userId) {
         } else {
-            throw new ValidationException("User has nothing to do with the thing");
+            throw new NotFoundException("User has nothing to do with the thing");
         }
     }
 
@@ -97,9 +96,24 @@ public class Validate {
         }
     }
 
-    public void validateBookingAvailable(long itemId) {
-        if (itemRepository.getById(itemId).getAvailable() == false) {
+    public void validateBookingAvailable(Booking booking) {
+        if (!itemRepository.getById(booking.getItemId()).getAvailable()) {
             throw new ValidationException("Item not available");
+        }
+        System.out.println("qqqqqqqqqq " + bookingRepository.getByItemIdAndTime(booking.getItemId(), booking.getStart(), booking.getEnd()));
+        System.out.println("wwwwwwwwww " + bookingRepository.getAll());
+        if (!bookingRepository.getByItemIdAndTime(booking.getItemId(), booking.getStart(), booking.getEnd()).isEmpty()) {
+            throw new NotFoundException("Timeslot already using");
+        }
+        System.out.println("llllllllllll" + bookingRepository.getByItemIdAndUserId(booking.getItemId(), booking.getBookerId()));
+//        if (!bookingRepository.getByItemIdAndUserId(booking.getItemId(), booking.getBookerId()).isEmpty()) {
+//            throw new NotFoundException("User already booking this item");
+//        }
+        System.out.println("booking " + bookingRepository.getAll());
+        System.out.println("item " + itemRepository.getAll());
+        System.out.println("user " + userRepository.getAll());
+        if (itemRepository.getById(booking.getItemId()).getOwnerId() == booking.getBookerId()) {
+            throw new NotFoundException("User cannot book his item");
         }
     }
 
@@ -109,6 +123,30 @@ public class Validate {
         }
         if (booking.getEnd().isBefore(LocalDateTime.now()) || booking.getStart().isBefore(LocalDateTime.now().minusMinutes(1))) {
             throw new ValidationException("End or start time before now");
+        }
+    }
+
+    public void validateApproveStatus(BookingState status) {
+        if (status == BookingState.APPROVED) {
+            throw new ValidationException("Status has already been APPROVED");
+        }
+    }
+
+    public void validateUserBookingItem(long userId, long itemId) {
+        if (bookingRepository.getByItemIdLast(userId, itemId, LocalDateTime.now()).stream().count() == 0) {
+            throw new ValidationException("Booking last time not found");
+        }
+    }
+
+    public void validateBookingLastTime(long userId, long itemId) {
+        if (bookingRepository.getByItemId(userId, itemId).stream().count() == 0) {
+            throw new ValidationException("Booking from user not found");
+        }
+    }
+
+    public void validateComment(long userId, Comment comment) {
+        if (comment.getText().equals("")) {
+            throw new ValidationException("Text comment not maybe empty");
         }
     }
 }

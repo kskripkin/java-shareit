@@ -9,8 +9,8 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "items")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+@Table(name = "items")
 public class Item {
 
     @Id
@@ -27,9 +27,6 @@ public class Item {
 
     @Column(name = "owner_id", nullable = false)
     private long ownerId;
-
-    @Column(name = "request_booking_id")
-    private long requestBookingId;
 
     public Item(String name, String description, Boolean available) {
         this.name = name;

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "comments")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -22,7 +24,7 @@ public class Comment {
     private String text;
 
     @Column(name = "author_name", nullable = false)
-    private String name;
+    private String authorName;
 
     @Column(name = "item_id", nullable = false)
     private long itemId;

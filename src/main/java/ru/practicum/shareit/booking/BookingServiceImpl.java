@@ -3,12 +3,11 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
-import ru.practicum.shareit.exception.model.NotFoundException;
+import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.validate.Validate;
 
@@ -26,30 +25,32 @@ public class BookingServiceImpl implements BookingService {
     private final BookingMapper bookingMapper;
 
     @Override
-    @Transactional
-    public BookingDto booking(long userId, Booking booking) {
-        validate.validate(userId);
-        validate.validateShowItem(booking.getItemId());
-        validate.validateBookingAvailable(booking.getItemId());
-        validate.bookingTime(booking);
-        booking.setStatus(BookingState.WAITING);
-        booking.setBookerId(userId);
-        booking.setItemName(itemRepository.getById(booking.getItemId()).getName());
-        Booking bookingFinal = bookingRepository.save(booking);
-        itemRepository.booking(bookingFinal.getId(), bookingFinal.getItemId());
-        return bookingMapper.toBookingDto(bookingFinal);
-    }
-
-    @Override
-    @Transactional
-    public void bookingApproveOrDeclined(long bookingId, boolean status, long userId) {
+    public BookingDto bookingApproveOrDeclined(long bookingId, boolean status, long userId) {
         validate.validate(userId);
         validate.booking(bookingId);
         validate.validateUserOwnItem(userId, bookingRepository.getById(bookingId).getItemId());
-        if (status == true) {
-            bookingRepository.changeStatus(BookingState.APPROVED.toString(), bookingId);
-            itemRepository.changeAvailable(false, bookingRepository.getById(bookingId).getItemId());
+        Booking booking = bookingRepository.getById(bookingId);
+        validate.validateApproveStatus(booking.getStatus());
+        if (status) {
+            booking.setStatus(BookingState.APPROVED);
+        } else {
+            booking.setStatus(BookingState.REJECTED);
         }
+        bookingRepository.save(booking);
+        return bookingMapper.toBookingDto(booking);
+    }
+
+    @Override
+    public BookingDto booking(long userId, Booking booking) {
+        validate.validate(userId);
+        validate.validateShowItem(booking.getItemId());
+        booking.setBookerId(userId);
+        validate.validateBookingAvailable(booking);
+        validate.bookingTime(booking);
+        booking.setStatus(BookingState.WAITING);
+        booking.setItemName(itemRepository.getById(booking.getItemId()).getName());
+        Booking bookingFinal = bookingRepository.save(booking);
+        return bookingMapper.toBookingDto(bookingFinal);
     }
 
     @Override
@@ -61,44 +62,48 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<Booking> getBookingsUserAll(String state, long userId) {
+    public Collection<BookingDto> getBookingsUserAll(String state, long userId) {
         validate.validate(userId);
+        LocalDateTime ldt = LocalDateTime.now();
         switch (state) {
             case "ALL":
-                return bookingRepository.getByBookerId(userId);
+                System.out.println("all bookings: " + bookingRepository.getAll());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerId(userId));
             case "CURRENT":
-                return bookingRepository.getByBookerIdAndCurrentTime(userId, LocalDateTime.now());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndCurrentTime(userId, ldt));
             case "PAST":
-                return bookingRepository.getByBookerIdAndPastTime(userId, LocalDateTime.now());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndPastTime(userId, ldt));
             case "FUTURE":
-                return bookingRepository.getByBookerIdAndFutureTime(userId, LocalDateTime.now());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndFutureTime(userId, ldt));
             case "WAITING":
-                return bookingRepository.getByBookerIdAndStatus(userId, state);
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndStatus(userId, state));
             case "REJECTED":
-                return bookingRepository.getByBookerIdAndStatus(userId, state);
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndStatus(userId, state));
             default:
-                throw new NotFoundException("State not found");
+                throw new ValidationException("Unknown state: " + state);
         }
     }
 
     @Override
-    public Collection<Booking> getBookingsOwnerAll(String state, long userId) {
+    public Collection<BookingDto> getBookingsOwnerAll(String state, long userId) {
         validate.validate(userId);
+        LocalDateTime ldt = LocalDateTime.now();
         switch (state) {
             case "ALL":
-                return bookingRepository.getByOwnerId(userId);
+                System.out.println("all bookings: " + bookingRepository.getAll());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerId(userId));
             case "CURRENT":
-                return bookingRepository.getByOwnerIdAndCurrentTime(userId, LocalDateTime.now());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndCurrentTime(userId, ldt));
             case "PAST":
-                return bookingRepository.getByOwnerIdAndPastTime(userId, LocalDateTime.now());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndPastTime(userId, ldt));
             case "FUTURE":
-                return bookingRepository.getByOwnerIdAndFutureTime(userId, LocalDateTime.now());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndFutureTime(userId, ldt));
             case "WAITING":
-                return bookingRepository.getByOwnerIdAndStatus(userId, state);
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndStatus(userId, state));
             case "REJECTED":
-                return bookingRepository.getByOwnerIdAndStatus(userId, state);
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndStatus(userId, state));
             default:
-                throw new NotFoundException("State not found");
+                throw new ValidationException("Unknown state: " + state);
         }
     }
 }

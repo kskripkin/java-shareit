@@ -25,26 +25,24 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public BookingDto bookingApproveOrDeclined(@PathVariable int bookingId, @RequestParam boolean approved, @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("PATCH /bookings/{}?approved={} X-Sharer-User-Id={}", bookingId, approved, userId);
-        bookingService.bookingApproveOrDeclined(bookingId, approved, userId);
-        BookingDto booking = getBooking(bookingId, userId);
-        return getBooking(bookingId, userId);
+        return bookingService.bookingApproveOrDeclined(bookingId, approved, userId);
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDto getBooking(@PathVariable int bookingId, @RequestHeader("X-Sharer-User-Id") long userId) {
+    public BookingDto getBooking(@PathVariable long bookingId, @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("GET /bookings/{} X-Sharer-User-Id={}", bookingId, userId);
         return bookingService.getBooking(bookingId, userId);
     }
 
     @GetMapping
-    public Collection<Booking> getBookingsUserAll(@RequestParam(required = false, defaultValue = "ALL") String state, @RequestHeader("X-Sharer-User-Id") long userId) {
-        log.info("GET /bookings?state= X-Sharer-User-Id={}", state, userId);
+    public Collection<BookingDto> getBookingsUserAll(@RequestParam(required = false, defaultValue = "ALL") String state, @RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("GET /bookings?state={} X-Sharer-User-Id={}", state, userId);
         return bookingService.getBookingsUserAll(state, userId);
     }
 
     @GetMapping("/owner")
-    public Collection<Booking> getBookingsOwnerAll(@RequestParam(required = false, defaultValue = "ALL") String state, @RequestHeader("X-Sharer-User-Id") long userId) {
-        log.info("GET /bookings?state= X-Sharer-User-Id={}", state, userId);
+    public Collection<BookingDto> getBookingsOwnerAll(@RequestParam(required = false, defaultValue = "ALL") String state, @RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("GET /bookings/owner?state={} X-Sharer-User-Id={}", state, userId);
         return bookingService.getBookingsOwnerAll(state, userId);
     }
 }

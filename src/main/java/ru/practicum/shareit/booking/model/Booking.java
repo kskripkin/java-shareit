@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "bookings")
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @NoArgsConstructor
 public class Booking {
 

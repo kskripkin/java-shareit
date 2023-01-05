@@ -7,9 +7,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor

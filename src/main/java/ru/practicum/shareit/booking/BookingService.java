@@ -9,11 +9,11 @@ public interface BookingService {
 
     BookingDto booking(long userId, Booking booking);
 
-    void bookingApproveOrDeclined(long bookingId, boolean approved, long userId);
+    BookingDto bookingApproveOrDeclined(long bookingId, boolean approved, long userId);
 
     BookingDto getBooking(long bookingId, long userId);
 
-    Collection<Booking> getBookingsUserAll(String state, long userId);
+    Collection<BookingDto> getBookingsUserAll(String state, long userId);
 
-    Collection<Booking> getBookingsOwnerAll(String state, long userId);
+    Collection<BookingDto> getBookingsOwnerAll(String state, long userId);
 }

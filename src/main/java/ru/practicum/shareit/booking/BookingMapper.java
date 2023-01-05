@@ -7,6 +7,10 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.user.dao.UserRepository;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Component
 @RequiredArgsConstructor
 public class BookingMapper {
@@ -23,6 +27,11 @@ public class BookingMapper {
                 booking.getStatus(),
                 itemRepository.getById(booking.getItemId())
         );
+    }
+
+    public Collection<BookingDto> manyToBookingDto(Collection<Booking> booking) {
+        Stream<Booking> bookingStream = booking.stream();
+        return bookingStream.map(x -> toBookingDto(x)).collect(Collectors.toList());
     }
 
     public Booking toBooking(BookingDto bookingDto) {
