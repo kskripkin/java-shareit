@@ -29,9 +29,6 @@ public class Validate {
         if (user.getEmail() == null || !EmailValidator.getInstance().isValid(user.getEmail())) {
             throw new ValidationException("Email not valid");
         }
-//        if (userRepository.findByEmailContainingIgnoreCase(user.getEmail()).size() != 0) {
-//            throw new ConflictException("Duplicate email");
-//        }
     }
 
     public void validateUpdateUser(User user) {
@@ -101,18 +98,9 @@ public class Validate {
         if (!itemRepository.getById(booking.getItemId()).getAvailable()) {
             throw new ValidationException("Item not available");
         }
-        System.out.println("qqqqqqqqqq " + bookingRepository.getByItemIdAndTime(booking.getItemId(), booking.getStart(), booking.getEnd()));
-        System.out.println("wwwwwwwwww " + bookingRepository.getAll());
         if (!bookingRepository.getByItemIdAndTime(booking.getItemId(), booking.getStart(), booking.getEnd()).isEmpty()) {
             throw new NotFoundException("Timeslot already using");
         }
-        System.out.println("llllllllllll" + bookingRepository.getByItemIdAndUserId(booking.getItemId(), booking.getBookerId()));
-//        if (!bookingRepository.getByItemIdAndUserId(booking.getItemId(), booking.getBookerId()).isEmpty()) {
-//            throw new NotFoundException("User already booking this item");
-//        }
-        System.out.println("booking " + bookingRepository.getAll());
-        System.out.println("item " + itemRepository.getAll());
-        System.out.println("user " + userRepository.getAll());
         if (itemRepository.getById(booking.getItemId()).getOwnerId() == booking.getBookerId()) {
             throw new NotFoundException("User cannot book his item");
         }
