@@ -1,19 +1,40 @@
 package ru.practicum.shareit.booking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.practicum.shareit.item.model.Item;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Data
+@Entity
+@Table(name = "bookings")
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@NoArgsConstructor
 public class Booking {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "start_time", nullable = false)
     private LocalDateTime start;
+
+    @Column(name = "end_time", nullable = false)
     private LocalDateTime end;
-    private Item item;
-    private String booker;
-    private String status;
+
+    @Column(name = "item_id", nullable = false)
+    private long itemId;
+
+    @Column(name = "booker_id", nullable = false)
+    private long bookerId;
+
+    @Enumerated(EnumType.STRING)
+    private BookingState status;
+
+    @Column(name = "item_name")
+    private String itemName;
 }

@@ -2,7 +2,7 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.dao.UserDAO;
+import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.validate.Validate;
 
@@ -12,35 +12,43 @@ import java.util.Collection;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO userDAO;
+    private final UserRepository userRepository;
     private final Validate validate;
 
     @Override
-    public User getUser(int id) {
+    public User getUser(long id) {
         validate.validate(id);
-        return userDAO.getUser(id);
+        return userRepository.getById(id);
     }
 
     @Override
     public Collection<User> getUsers() {
-        return userDAO.getUsers();
+        return userRepository.findAll();
     }
 
     @Override
     public User createUser(User user) {
         validate.validateCreateUser(user);
-        return userDAO.createUser(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public User updateUser(int id, User user) {
+    public User updateUser(long id, User user) {
         validate.validateUpdateUser(user);
-        return userDAO.updateUser(id, user);
+        user.setId(id);
+        User userSource = userRepository.getById(id);
+        if (user.getName() == null) {
+            user.setName(userSource.getName());
+        }
+        if (user.getEmail() == null) {
+            user.setEmail(userSource.getEmail());
+        }
+        return userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(int id) {
+    public void deleteUser(long id) {
         validate.validate(id);
-        userDAO.deleteUser(id);
+        userRepository.deleteById(id);
     }
 }
