@@ -7,9 +7,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("{id}")
-    public User getUser(@PathVariable int id) {
+    public User getUser(@PathVariable long id) {
         log.info("GET /users/{}", id);
         return userService.getUser(id);
     }
@@ -37,14 +34,15 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    public User updateUser(@RequestBody User user, @PathVariable int id) {
-        log.info("PATCH /users");
-        return userService.updateUser(id, user);
+    public User updateUser(@RequestBody User user, @PathVariable long id) {
+        log.info("PATCH /users/{}", id);
+        User user1 = userService.updateUser(id, user);
+        return user1;
     }
 
     @DeleteMapping("{id}")
-    public void deleteUser(@PathVariable int id) {
-        log.info("DELETE /users");
+    public void deleteUser(@PathVariable long id) {
+        log.info("DELETE /users/{}", id);
         userService.deleteUser(id);
     }
 }
