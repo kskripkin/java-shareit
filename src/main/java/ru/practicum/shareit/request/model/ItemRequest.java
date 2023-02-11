@@ -16,7 +16,7 @@ public class ItemRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(nullable = false)
     private String description;
@@ -26,6 +26,9 @@ public class ItemRequest {
 
     @Column(nullable = false)
     private LocalDateTime created;
+
+    @Column(name = "item_id")
+    private Long itemId;
 
     public ItemRequest(String description, long requesterId) {
         this.description = description;

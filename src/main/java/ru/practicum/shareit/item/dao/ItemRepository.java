@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.item.model.Item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -33,4 +34,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "set request_booking_id = ?1 " +
             "where id = ?2", nativeQuery = true)
     void booking(long bookId, long itemId);
+
+    @Query(value = "select * " +
+            "from items " +
+            "where request_id = ?1", nativeQuery = true)
+    ArrayList<Item> getByRequestId(Long rqId);
 }

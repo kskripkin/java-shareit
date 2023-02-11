@@ -30,7 +30,8 @@ public class ItemMapper {
                     item.getAvailable(),
                     new LastBooking(bookingLast.getId(), bookingLast.getBookerId()),
                     new NextBooking(bookingNext.getId(), bookingNext.getBookerId()),
-                    commentsRepository.getByItemId(item.getId())
+                    commentsRepository.getByItemId(item.getId()),
+                    item.getRequestId()
             );
         } else if (bookingLast == null && bookingNext == null) {
             return new ItemDto(
@@ -40,7 +41,8 @@ public class ItemMapper {
                     item.getAvailable(),
                     null,
                     null,
-                    commentsRepository.getByItemId(item.getId())
+                    commentsRepository.getByItemId(item.getId()),
+                    item.getRequestId()
             );
         } else if (bookingLast != null && bookingNext == null) {
             return new ItemDto(
@@ -50,7 +52,8 @@ public class ItemMapper {
                     item.getAvailable(),
                     new LastBooking(bookingLast.getId(), bookingLast.getBookerId()),
                     null,
-                    commentsRepository.getByItemId(item.getId())
+                    commentsRepository.getByItemId(item.getId()),
+                    item.getRequestId()
             );
         } else {
             return new ItemDto(
@@ -60,7 +63,8 @@ public class ItemMapper {
                     item.getAvailable(),
                     null,
                     new NextBooking(bookingNext.getId(), bookingNext.getBookerId()),
-                    commentsRepository.getByItemId(item.getId())
+                    commentsRepository.getByItemId(item.getId()),
+                    item.getRequestId()
             );
         }
     }
@@ -69,7 +73,8 @@ public class ItemMapper {
         return new Item(
                 itemDto.getName(),
                 itemDto.getDescription(),
-                itemDto.getAvailable()
+                itemDto.getAvailable(),
+                itemDto.getRequestId()
         );
     }
 }

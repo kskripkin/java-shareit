@@ -141,14 +141,8 @@ public class Validate {
     }
 
     public void validateItemRequests(ItemRequest itemRequest) {
-        if (itemRequest.getRequesterId() == null) {
-            throw new ValidationException("RequesterId is empty");
-        }
         if (itemRequest.getDescription() == "" || itemRequest.getDescription() == null) {
             throw new ValidationException("Description is empty");
-        }
-        if (itemRequest.getCreated() == null) {
-            throw new ValidationException("Created time is empty");
         }
     }
 }

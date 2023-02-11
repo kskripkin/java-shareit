@@ -24,14 +24,23 @@ public class ItemDto {
 
     private ArrayList<Comment> comments;
 
+    private Long requestId;
+
     public ItemDto(String name, String description, Boolean available) {
         this.name = name;
         this.description = description;
         this.available = available;
     }
 
+    public ItemDto(String name, String description, Boolean available, Long requestId) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.requestId = requestId;
+    }
 
-    public ItemDto(long id, String name, String description, Boolean available, LastBooking lastBooking, NextBooking nextBooking, ArrayList<Comment> comments) {
+
+    public ItemDto(long id, String name, String description, Boolean available, LastBooking lastBooking, NextBooking nextBooking, ArrayList<Comment> comments, Long requestId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -39,5 +48,6 @@ public class ItemDto {
         this.lastBooking = lastBooking;
         this.nextBooking = nextBooking;
         this.comments = comments;
+        this.requestId = requestId;
     }
 }

@@ -6,12 +6,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.validate.Validate;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -21,27 +26,40 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final Validate validate;
 
+    private final ItemRequestMapper itemRequestMapper;
+
     @Override
-    public ItemRequest addRequest(ItemRequest itemRequest, long userId) {
+    public ItemRequestDto addRequest(ItemRequest itemRequest, long userId) {
         validate.validate(userId);
         validate.validateItemRequests(itemRequest);
-        return itemRequestRepository.save(itemRequest);
+        itemRequest.setRequesterId(userId);
+        itemRequest.setCreated(LocalDateTime.now());
+//        Stream<Item> itemStream = itemRepository.findItemsByUserId(userId).stream();
+//        return itemStream.map(x -> itemMapper.toItemDto(userId, x)).collect(Collectors.toList());
+
+        return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.save(itemRequest));
     }
 
     @Override
-    public Collection<ItemRequest> getRequests(long userId) {
+    public Collection<ItemRequestDto> getRequests(long userId) {
         validate.validate(userId);
-        return itemRequestRepository.getItemRequests();
+        return itemRequestRepository.getItemRequests().stream()
+                .map(x -> itemRequestMapper.itemRequestToItemRequestDto(x))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<ItemRequest> getRequestsAll(int from, int size, long userId) {
+    public List<ItemRequestDto> getRequestsAll(int from, int size, long userId) {
         validate.validate(userId);
-        return itemRequestRepository.findByRequesterId(PageRequest.of(from, size, Sort.by("created").descending()));
+        return itemRequestRepository.findByRequesterId(PageRequest
+                .of(from, size, Sort.by("created").descending()))
+                .stream()
+                .map(x -> itemRequestMapper.itemRequestToItemRequestDto(x))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ItemRequest getRequestOne(long requestId) {
-        return itemRequestRepository.getRequestOne(requestId);
+    public ItemRequestDto getRequestOne(long requestId) {
+        return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.getRequestOne(requestId));
     }
 }
