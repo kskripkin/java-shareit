@@ -12,6 +12,7 @@ import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
@@ -25,6 +26,8 @@ public class Validate {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
+
+    private final ItemRequestRepository itemRequestRepository;
 
     public void validateCreateUser(User user) {
         if (user.getEmail() == null || !EmailValidator.getInstance().isValid(user.getEmail())) {
@@ -143,6 +146,12 @@ public class Validate {
     public void validateItemRequests(ItemRequest itemRequest) {
         if (itemRequest.getDescription() == "" || itemRequest.getDescription() == null) {
             throw new ValidationException("Description is empty");
+        }
+    }
+
+    public void validateItemRequestsId(long requestId) {
+        if (!itemRequestRepository.findById(requestId).isEmpty()) {
+            throw new NotFoundException("NotFound");
         }
     }
 }

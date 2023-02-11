@@ -70,11 +70,20 @@ public class ItemMapper {
     }
 
     public Item toItem(ItemDto itemDto) {
-        return new Item(
-                itemDto.getName(),
-                itemDto.getDescription(),
-                itemDto.getAvailable(),
-                itemDto.getRequestId()
-        );
+        if (itemDto.getRequestId() != null) {
+            return new Item(
+                    itemDto.getName(),
+                    itemDto.getDescription(),
+                    itemDto.getAvailable(),
+                    itemDto.getRequestId()
+            );
+        } else {
+            return new Item(
+                    itemDto.getName(),
+                    itemDto.getDescription(),
+                    itemDto.getAvailable(),
+                    null
+            );
+        }
     }
 }

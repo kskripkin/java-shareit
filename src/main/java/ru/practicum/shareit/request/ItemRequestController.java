@@ -40,9 +40,10 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ItemRequestDto getRequestOne(@PathVariable long requestId) {
-        log.info("GET /requests/{}", requestId);
-        return itemRequestService.getRequestOne(requestId);
+    public ItemRequestDto getRequestOne(@PathVariable long requestId,
+                                        @RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("GET /requests/{} X-Sharer-User-Id={}", requestId, userId);
+        return itemRequestService.getRequestOne(requestId, userId);
     }
 
 }

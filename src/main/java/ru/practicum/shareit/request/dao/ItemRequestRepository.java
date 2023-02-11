@@ -21,6 +21,12 @@ public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> 
     ItemRequest getRequestOne(long requestId);
 
     @Query(value = "select * " +
-            "from item_requests ", nativeQuery = true)
-    List<ItemRequest> findByRequesterId(Pageable pageable);
+            "from item_requests " +
+            "where requester_id != ?1 ", nativeQuery = true)
+    List<ItemRequest> findByRequesterId(long userId, Pageable pageable);
+
+    @Query(value = "select * " +
+            "from item_requests " +
+            "where id != ?1 ", nativeQuery = true)
+    Collection<ItemRequest> findById(long requestId);
 }

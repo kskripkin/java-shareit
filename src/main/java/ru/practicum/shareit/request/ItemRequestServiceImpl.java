@@ -34,9 +34,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         validate.validateItemRequests(itemRequest);
         itemRequest.setRequesterId(userId);
         itemRequest.setCreated(LocalDateTime.now());
-//        Stream<Item> itemStream = itemRepository.findItemsByUserId(userId).stream();
-//        return itemStream.map(x -> itemMapper.toItemDto(userId, x)).collect(Collectors.toList());
-
         return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.save(itemRequest));
     }
 
@@ -44,22 +41,24 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public Collection<ItemRequestDto> getRequests(long userId) {
         validate.validate(userId);
         return itemRequestRepository.getItemRequests().stream()
-                .map(x -> itemRequestMapper.itemRequestToItemRequestDto(x))
+                .map(itemRequestMapper::itemRequestToItemRequestDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ItemRequestDto> getRequestsAll(int from, int size, long userId) {
         validate.validate(userId);
-        return itemRequestRepository.findByRequesterId(PageRequest
+        return itemRequestRepository.findByRequesterId(userId, PageRequest
                 .of(from, size, Sort.by("created").descending()))
                 .stream()
-                .map(x -> itemRequestMapper.itemRequestToItemRequestDto(x))
+                .map(itemRequestMapper::itemRequestToItemRequestDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ItemRequestDto getRequestOne(long requestId) {
+    public ItemRequestDto getRequestOne(long requestId, long userId) {
+        validate.validate(userId);
+        validate.validateItemRequestsId(requestId);
         return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.getRequestOne(requestId));
     }
 }

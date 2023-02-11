@@ -39,7 +39,6 @@ public class ItemDto {
         this.requestId = requestId;
     }
 
-
     public ItemDto(long id, String name, String description, Boolean available, LastBooking lastBooking, NextBooking nextBooking, ArrayList<Comment> comments, Long requestId) {
         this.id = id;
         this.name = name;

@@ -29,7 +29,7 @@ public class Item {
     private long ownerId;
 
     @Column(name = "request_id", nullable = false)
-    private long requestId;
+    private Long requestId;
 
     public Item(String name, String description, Boolean available) {
         this.name = name;
@@ -37,7 +37,7 @@ public class Item {
         this.available = available;
     }
 
-    public Item(String name, String description, Boolean available, long requestId) {
+    public Item(String name, String description, Boolean available, Long requestId) {
         this.name = name;
         this.description = description;
         this.available = available;

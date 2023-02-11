@@ -36,6 +36,9 @@ public class ItemServiceImpl implements ItemService {
         item = itemMapper.toItem(itemDto);
         item.setOwnerId(userId);
         validate.validate(userId);
+        if (itemDto.getRequestId() == null) {
+            item.setRequestId(0L);
+        }
         return itemMapper.toItemDto(userId, itemRepository.save(item));
     }
 
@@ -55,6 +58,9 @@ public class ItemServiceImpl implements ItemService {
         }
         if (item.getAvailable() == null) {
             item.setAvailable(itemSource.getAvailable());
+        }
+        if (itemDto.getRequestId() == null) {
+            item.setRequestId(0L);
         }
         return itemMapper.toItemDto(userId, itemRepository.save(item));
     }

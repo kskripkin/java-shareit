@@ -1,11 +1,13 @@
 package ru.practicum.shareit.booking.dao;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.booking.model.Booking;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
@@ -29,66 +31,66 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "from bookings " +
             "where booker_id = ?1 " +
             "order by start_time desc", nativeQuery = true)
-    Collection<Booking> getByBookerId(long userId);
+    List<Booking> getByBookerId(long userId, Pageable pageable);
 
     @Query(value = "select * " +
             "from bookings " +
             "where booker_id = ?1 and start_time <= ?2 and end_time > ?2 " +
             "order by start_time desc", nativeQuery = true)
-    Collection<Booking> getByBookerIdAndCurrentTime(long userId, LocalDateTime localDateTime);
+    List<Booking> getByBookerIdAndCurrentTime(long userId, LocalDateTime localDateTime, Pageable pageable);
 
     @Query(value = "select * " +
             "from bookings " +
             "where booker_id = ?1 and end_time < ?2 " +
             "order by start_time desc", nativeQuery = true)
-    Collection<Booking> getByBookerIdAndPastTime(long userId, LocalDateTime localDateTime);
+    List<Booking> getByBookerIdAndPastTime(long userId, LocalDateTime localDateTime, Pageable pageable);
 
     @Query(value = "select * " +
             "from bookings " +
             "where booker_id = ?1 and start_time > ?2 " +
             "order by start_time desc", nativeQuery = true)
-    Collection<Booking> getByBookerIdAndFutureTime(long userId, LocalDateTime localDateTime);
+    List<Booking> getByBookerIdAndFutureTime(long userId, LocalDateTime localDateTime, Pageable pageable);
 
     @Query(value = "select * " +
             "from bookings " +
             "where booker_id = ?1 and status = ?2 " +
             "order by start_time desc", nativeQuery = true)
-    Collection<Booking> getByBookerIdAndStatus(long userId, String status);
+    List<Booking> getByBookerIdAndStatus(long userId, String status, Pageable pageable);
 
     @Query(value = "select b.id, b.start_time, b.end_time, b.item_id, b.booker_id, b.status, b.item_name " +
             "from bookings as b " +
             "join items as i on b.item_id = i.id " +
             "where i.owner_id = ?1 " +
             "order by b.start_time desc", nativeQuery = true)
-    Collection<Booking> getByOwnerId(long userId);
+    List<Booking> getByOwnerId(long userId, Pageable pageable);
 
     @Query(value = "select b.id, b.start_time, b.end_time, b.item_id, b.booker_id, b.status, b.item_name " +
             "from bookings b " +
             "join items i on b.item_id = i.id " +
             "where i.owner_id = ?1 and b.start_time <= ?2 and b.end_time > ?2 " +
             "order by b.start_time desc", nativeQuery = true)
-    Collection<Booking> getByOwnerIdAndCurrentTime(long userId, LocalDateTime localDateTime);
+    List<Booking> getByOwnerIdAndCurrentTime(long userId, LocalDateTime localDateTime, Pageable pageable);
 
     @Query(value = "select b.id, b.start_time, b.end_time, b.item_id, b.booker_id, b.status, b.item_name " +
             "from bookings as b " +
             "join items as i on b.item_id = i.id " +
             "where i.owner_id = ?1 and b.end_time < ?2 " +
             "order by b.start_time desc", nativeQuery = true)
-    Collection<Booking> getByOwnerIdAndPastTime(long userId, LocalDateTime localDateTime);
+    List<Booking> getByOwnerIdAndPastTime(long userId, LocalDateTime localDateTime, Pageable pageable);
 
     @Query(value = "select b.id, b.start_time, b.end_time, b.item_id, b.booker_id, b.status, b.item_name " +
             "from bookings as b " +
             "join items as i on b.item_id = i.id " +
             "where i.owner_id = ?1 and b.start_time > ?2 " +
             "order by b.start_time desc", nativeQuery = true)
-    Collection<Booking> getByOwnerIdAndFutureTime(long userId, LocalDateTime localDateTime);
+    List<Booking> getByOwnerIdAndFutureTime(long userId, LocalDateTime localDateTime, Pageable pageable);
 
     @Query(value = "select b.id, b.start_time, b.end_time, b.item_id, b.booker_id, b.status, b.item_name " +
             "from bookings as b " +
             "join items as i on b.item_id = i.id " +
             "where i.owner_id = ?1 and b.status = ?2 " +
             "order by b.start_time desc", nativeQuery = true)
-    Collection<Booking> getByOwnerIdAndStatus(long userId, String status);
+    List<Booking> getByOwnerIdAndStatus(long userId, String status, Pageable pageable);
 
     @Query(value = "select b.id, b.start_time, b.end_time, b.item_id, b.booker_id, b.status, b.item_name " +
             "from bookings b " +
