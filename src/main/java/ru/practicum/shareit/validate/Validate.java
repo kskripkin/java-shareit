@@ -12,6 +12,7 @@ import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -136,6 +137,18 @@ public class Validate {
     public void validateComment(long userId, Comment comment) {
         if (comment.getText().equals("")) {
             throw new ValidationException("Text comment not maybe empty");
+        }
+    }
+
+    public void validateItemRequests(ItemRequest itemRequest) {
+        if (itemRequest.getRequesterId() == null) {
+            throw new ValidationException("RequesterId is empty");
+        }
+        if (itemRequest.getDescription() == "" || itemRequest.getDescription() == null) {
+            throw new ValidationException("Description is empty");
+        }
+        if (itemRequest.getCreated() == null) {
+            throw new ValidationException("Created time is empty");
         }
     }
 }
