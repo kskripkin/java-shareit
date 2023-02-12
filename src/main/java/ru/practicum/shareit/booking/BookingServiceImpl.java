@@ -66,20 +66,22 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Collection<BookingDto> getBookingsUserAll(String state, Integer from, Integer size, long userId) {
         validate.validate(userId);
+        validate.paginationFrom(from);
         LocalDateTime ldt = LocalDateTime.now();
         switch (state) {
             case "ALL":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerId(userId, PageRequest.of(from, size)));
+                System.out.println("all bookings: " + bookingRepository.getAll());
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerId(userId, PageRequest.of((from / size), size)));
             case "CURRENT":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndCurrentTime(userId, ldt, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndCurrentTime(userId, ldt, PageRequest.of((from / size), size)));
             case "PAST":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndPastTime(userId, ldt, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndPastTime(userId, ldt, PageRequest.of((from / size), size)));
             case "FUTURE":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndFutureTime(userId, ldt, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndFutureTime(userId, ldt, PageRequest.of((from / size), size)));
             case "WAITING":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndStatus(userId, state, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndStatus(userId, state, PageRequest.of((from / size), size)));
             case "REJECTED":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndStatus(userId, state, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndStatus(userId, state, PageRequest.of((from / size), size)));
             default:
                 throw new ValidationException("Unknown state: " + state);
         }
@@ -88,20 +90,22 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Collection<BookingDto> getBookingsOwnerAll(String state, Integer from, Integer size, long userId) {
         validate.validate(userId);
+        validate.paginationFrom(from);
         LocalDateTime ldt = LocalDateTime.now();
         switch (state) {
             case "ALL":
+                System.out.println("all bookings: " + bookingRepository.getAll());
                 return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerId(userId, PageRequest.of(from, size)));
             case "CURRENT":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndCurrentTime(userId, ldt, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndCurrentTime(userId, ldt, PageRequest.of((from / size), size)));
             case "PAST":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndPastTime(userId, ldt, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndPastTime(userId, ldt, PageRequest.of((from / size), size)));
             case "FUTURE":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndFutureTime(userId, ldt, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndFutureTime(userId, ldt, PageRequest.of((from / size), size)));
             case "WAITING":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndStatus(userId, state, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndStatus(userId, state, PageRequest.of((from / size), size)));
             case "REJECTED":
-                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndStatus(userId, state, PageRequest.of(from, size)));
+                return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndStatus(userId, state, PageRequest.of((from / size), size)));
             default:
                 throw new ValidationException("Unknown state: " + state);
         }

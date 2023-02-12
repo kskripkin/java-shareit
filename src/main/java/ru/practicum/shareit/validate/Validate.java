@@ -17,6 +17,7 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -152,6 +153,12 @@ public class Validate {
     public void validateItemRequestsId(long requestId) {
         if (!itemRequestRepository.findById(requestId).isEmpty()) {
             throw new NotFoundException("NotFound");
+        }
+    }
+
+    public void paginationFrom(Integer from) {
+        if (from < 0) {
+            throw new ValidationException("From < 0");
         }
     }
 }
