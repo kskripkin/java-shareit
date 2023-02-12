@@ -120,8 +120,4 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.email", is(updateUser.getEmail())));
     }
-
-    @Test
-    void deleteUser() throws Exception {
-    }
 }
