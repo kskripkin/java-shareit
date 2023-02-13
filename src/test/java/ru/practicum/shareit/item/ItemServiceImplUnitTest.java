@@ -11,6 +11,7 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,6 +25,7 @@ class ItemServiceImplUnitTest {
     private User user;
     private Item item;
     private ItemDto itemDto;
+    private List<ItemDto> itemListDto;
 
     @BeforeEach
     void setUp() {
@@ -41,6 +43,10 @@ class ItemServiceImplUnitTest {
         itemDto.setRequestId(0L);
         itemDto.setComments(new ArrayList<>());
         itemDto.setId(1);
+
+        itemListDto = new ArrayList<>();
+        itemListDto.add(itemDto);
+
     }
 
     @Order(1)
@@ -66,19 +72,15 @@ class ItemServiceImplUnitTest {
         assertEquals(itemService.showItem(1, 1), itemDto);
     }
 
+    @Order(4)
     @Test
     void showItems() {
+        assertEquals(itemService.showItems(1), itemListDto);
     }
 
+    @Order(5)
     @Test
     void searchItems() {
-    }
-
-    @Test
-    void getComments() {
-    }
-
-    @Test
-    void addComment() {
+        assertEquals(itemService.searchItems(1, "text"), itemListDto);
     }
 }

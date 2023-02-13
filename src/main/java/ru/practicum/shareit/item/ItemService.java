@@ -6,7 +6,7 @@ import ru.practicum.shareit.item.model.Comment;
 
 import java.util.Collection;
 
-interface ItemService {
+public interface ItemService {
 
     ItemDto addItem(long userId, ItemDto itemDto);
 
