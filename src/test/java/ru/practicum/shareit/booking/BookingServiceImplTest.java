@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@SpringJUnitConfig( { BookingServiceImpl.class})
+@SpringJUnitConfig({ BookingServiceImpl.class})
 class BookingServiceImplTest {
 
     private final EntityManager em;

@@ -3,7 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.model.NotFoundException;
 import ru.practicum.shareit.user.model.User;
@@ -70,7 +70,7 @@ class UserServiceImplUnitTest {
         userService.deleteUser(1);
         NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> {
             userService.getUser(1);
-        }, "NotFoundException was expected" );
+        }, "NotFoundException was expected");
         assertEquals(notFoundException.getMessage(), "User not found");
     }
 }

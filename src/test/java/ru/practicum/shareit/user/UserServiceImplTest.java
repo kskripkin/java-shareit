@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@SpringJUnitConfig( { UserServiceImpl.class})
+@SpringJUnitConfig({ UserServiceImpl.class})
 class UserServiceImplTest {
 
     private final EntityManager em;
