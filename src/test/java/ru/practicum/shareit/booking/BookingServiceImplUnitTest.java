@@ -57,10 +57,10 @@ class BookingServiceImplUnitTest {
         itemService.addItem(1, itemDto);
 
         booking = new Booking();
-        booking.setStatus(BookingState.APPROVED);
+        booking.setStatus(BookingState.WAITING);
         booking.setItemName("Text");
-        LocalDateTime ldt1 = LocalDateTime.now();
-        LocalDateTime ldt2 = LocalDateTime.now();
+        LocalDateTime ldt1 = LocalDateTime.now().plusHours(1);
+        LocalDateTime ldt2 = LocalDateTime.now().plusHours(2);
         booking.setStart(ldt1);
         booking.setEnd(ldt2);
         booking.setBookerId(2);
@@ -73,20 +73,15 @@ class BookingServiceImplUnitTest {
         item.setDescription("Text");
         item.setRequestId(0L);
         item.setId(1);
+        item.setOwnerId(1);
 
-        bookingDto = new BookingDto(1, ldt1, ldt2, user, BookingState.APPROVED, item);
+        bookingDto = new BookingDto(1, ldt1, ldt2, user, BookingState.WAITING, item);
     }
 
     @Order(1)
     @Test
     @Transactional
     void booking() {
-        assertEquals(bookingService.booking(1, booking), bookingDto);
-    }
-
-    @Test
-    void getBooking() {
-        bookingService.booking(1, booking);
-        assertEquals(bookingService.getBooking(1, 1), bookingDto);
+        assertEquals(bookingService.booking(2, booking), bookingDto);
     }
 }

@@ -17,7 +17,6 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
