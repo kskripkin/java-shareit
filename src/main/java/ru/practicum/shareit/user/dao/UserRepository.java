@@ -11,6 +11,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select * " +
             "from users ", nativeQuery = true)
     List<User> getAll();
-
-    List<User> findByEmailContainingIgnoreCase(String email);
 }
