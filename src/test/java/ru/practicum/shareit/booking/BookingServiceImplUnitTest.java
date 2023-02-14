@@ -72,12 +72,23 @@ class BookingServiceImplUnitTest {
     }
 
     @Test
-    void bookingApproveOrDeclinedTest() {
+    void bookingApproveOrDeclinedTrueTest() {
         when(bookingRepository.getById(any())).thenReturn(booking);
         when(bookingRepository.save(booking)).thenReturn(booking);
         when(bookingMapper.toBookingDto(booking)).thenReturn(bookingDto);
 
         BookingDto bookingDtoExp = bookingService.bookingApproveOrDeclined(1, true, 1);
+
+        assertEquals(bookingDtoExp, bookingDto);
+    }
+
+    @Test
+    void bookingApproveOrDeclinedFalseTest() {
+        when(bookingRepository.getById(any())).thenReturn(booking);
+        when(bookingRepository.save(booking)).thenReturn(booking);
+        when(bookingMapper.toBookingDto(booking)).thenReturn(bookingDto);
+
+        BookingDto bookingDtoExp = bookingService.bookingApproveOrDeclined(1, false, 1);
 
         assertEquals(bookingDtoExp, bookingDto);
     }
