@@ -83,7 +83,7 @@ class BookingServiceImplUnitTest {
     }
 
     @Test
-    void BookingTest() {
+    void bookingTest() {
         when(itemRepository.getById(1L)).thenReturn(item);
         when(bookingRepository.save(booking)).thenReturn(booking);
         when(bookingMapper.toBookingDto(booking)).thenReturn(bookingDto);
