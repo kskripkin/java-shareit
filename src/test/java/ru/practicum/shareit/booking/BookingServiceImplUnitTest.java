@@ -1,61 +1,50 @@
 package ru.practicum.shareit.booking;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
-import ru.practicum.shareit.item.ItemService;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserService;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.validate.Validate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(MockitoExtension.class)
 class BookingServiceImplUnitTest {
 
-    private final BookingService bookingService;
-    private final UserService userService;
-    private final ItemService itemService;
-    private Booking booking;
-    private BookingDto bookingDto;
-    private Item item;
-    private ItemDto itemDto;
-    private User user;
+    @InjectMocks
+    private BookingServiceImpl bookingService;
+
+    @Mock
+    private ItemRepository itemRepository;
+    @Mock
+    private BookingRepository bookingRepository;
+    @Mock
+    private Validate validate;
+    @Mock
+    private BookingMapper bookingMapper;
+
+    BookingDto bookingDto;
+    Booking booking;
+    Item item;
+
+    ArrayList<BookingDto> bookingDtoArrayList;
+    ArrayList<Booking> bookingArrayList;
 
     @BeforeEach
     void setUp() {
-        user = new User();
-        user.setId(1);
-        user.setName("Anna");
-        user.setEmail("anna@mail.ru");
-        userService.createUser(user);
-
-        user = new User();
-        user.setId(2);
-        user.setName("Anna2");
-        user.setEmail("anna2@mail.ru");
-        userService.createUser(user);
-
-        itemDto = new ItemDto();
-        itemDto.setAvailable(true);
-        itemDto.setName("Text");
-        itemDto.setDescription("Text");
-        itemDto.setRequestId(0L);
-        itemDto.setComments(new ArrayList<>());
-        itemDto.setId(1);
-        itemService.addItem(1, itemDto);
-
         booking = new Booking();
         booking.setStatus(BookingState.WAITING);
         booking.setItemName("Text");
@@ -75,13 +64,80 @@ class BookingServiceImplUnitTest {
         item.setId(1);
         item.setOwnerId(1);
 
-        bookingDto = new BookingDto(1, ldt1, ldt2, user, BookingState.WAITING, item);
+        bookingDto = new BookingDto(1, ldt1, ldt2, null, BookingState.WAITING, null);
+        bookingDtoArrayList = new ArrayList<>();
+        bookingDtoArrayList.add(bookingDto);
+        bookingArrayList = new ArrayList<>();
+        bookingArrayList.add(booking);
     }
 
-    @Order(1)
     @Test
-    @Transactional
-    void booking() {
-        assertEquals(bookingService.booking(2, booking), bookingDto);
+    void bookingApproveOrDeclinedTest() {
+        when(bookingRepository.getById(any())).thenReturn(booking);
+        when(bookingRepository.save(booking)).thenReturn(booking);
+        when(bookingMapper.toBookingDto(booking)).thenReturn(bookingDto);
+
+        BookingDto bookingDtoExp = bookingService.bookingApproveOrDeclined(1, true, 1);
+
+        assertEquals(bookingDtoExp, bookingDto);
+    }
+
+    @Test
+    void BookingTest() {
+        when(itemRepository.getById(1L)).thenReturn(item);
+        when(bookingRepository.save(booking)).thenReturn(booking);
+        when(bookingMapper.toBookingDto(booking)).thenReturn(bookingDto);
+
+        BookingDto bookingDtoExp = bookingService.booking(1, booking);
+
+        assertEquals(bookingDtoExp, bookingDto);
+    }
+
+    @Test
+    void getBookingTest() {
+        when(bookingRepository.getById(any())).thenReturn(booking);
+        when(bookingMapper.toBookingDto(booking)).thenReturn(bookingDto);
+
+        BookingDto bookingDtoExp = bookingService.getBooking(1, 1);
+
+        assertEquals(bookingDtoExp, bookingDto);
+    }
+
+    @Test
+    void getBookingsUserAllTest() {
+        when(bookingMapper.manyToBookingDto(any())).thenReturn(bookingDtoArrayList);
+
+        Collection<BookingDto> bdtArrALL = bookingService.getBookingsUserAll("ALL", 0, 1, 1);
+        Collection<BookingDto> bdtArrCURRENT = bookingService.getBookingsUserAll("CURRENT", 0, 1, 1);
+        Collection<BookingDto> bdtArrPAST = bookingService.getBookingsUserAll("PAST", 0, 1, 1);
+        Collection<BookingDto> bdtArrFUTURE = bookingService.getBookingsUserAll("FUTURE", 0, 1, 1);
+        Collection<BookingDto> bdtArrWAITING = bookingService.getBookingsUserAll("WAITING", 0, 1, 1);
+        Collection<BookingDto> bdtArrREJECTED = bookingService.getBookingsUserAll("REJECTED", 0, 1, 1);
+
+        assertEquals(bdtArrALL, bookingDtoArrayList);
+        assertEquals(bdtArrCURRENT, bookingDtoArrayList);
+        assertEquals(bdtArrPAST, bookingDtoArrayList);
+        assertEquals(bdtArrFUTURE, bookingDtoArrayList);
+        assertEquals(bdtArrWAITING, bookingDtoArrayList);
+        assertEquals(bdtArrREJECTED, bookingDtoArrayList);
+    }
+
+    @Test
+    void getBookingsOwnerAllTest() {
+        when(bookingMapper.manyToBookingDto(any())).thenReturn(bookingDtoArrayList);
+
+        Collection<BookingDto> bdtArrALL = bookingService.getBookingsOwnerAll("ALL", 0, 1, 1);
+        Collection<BookingDto> bdtArrCURRENT = bookingService.getBookingsOwnerAll("CURRENT", 0, 1, 1);
+        Collection<BookingDto> bdtArrPAST = bookingService.getBookingsOwnerAll("PAST", 0, 1, 1);
+        Collection<BookingDto> bdtArrFUTURE = bookingService.getBookingsOwnerAll("FUTURE", 0, 1, 1);
+        Collection<BookingDto> bdtArrWAITING = bookingService.getBookingsOwnerAll("WAITING", 0, 1, 1);
+        Collection<BookingDto> bdtArrREJECTED = bookingService.getBookingsOwnerAll("REJECTED", 0, 1, 1);
+
+        assertEquals(bdtArrALL, bookingDtoArrayList);
+        assertEquals(bdtArrCURRENT, bookingDtoArrayList);
+        assertEquals(bdtArrPAST, bookingDtoArrayList);
+        assertEquals(bdtArrFUTURE, bookingDtoArrayList);
+        assertEquals(bdtArrWAITING, bookingDtoArrayList);
+        assertEquals(bdtArrREJECTED, bookingDtoArrayList);
     }
 }
