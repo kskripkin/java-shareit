@@ -46,9 +46,9 @@ class ItemRequestRepositoryDataJpaTest {
     @Order(1)
     @Test
     void getRequestOne() {
-        ItemRequest ItemRequestFinal = itemRequestRepository.getRequestOne(1);
+        ItemRequest itemRequestFinal = itemRequestRepository.getRequestOne(1);
 
-        assertEquals(ItemRequestFinal.getId(), itemRequest.getId());
+        assertEquals(itemRequestFinal.getId(), itemRequest.getId());
     }
 
     @Test
