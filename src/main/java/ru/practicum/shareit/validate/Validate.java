@@ -53,18 +53,6 @@ public class Validate {
         }
     }
 
-    public void validateItem(Item item) {
-        if (item.getAvailable() == null) {
-            throw new ValidationException("Available not found");
-        }
-        if (item.getName() == "") {
-            throw new ValidationException("Name is empty");
-        }
-        if (item.getDescription() == "" || item.getDescription() == null) {
-            throw new ValidationException("Description is empty");
-        }
-    }
-
     public void validateItemDto(ItemDto itemDto) {
         if (itemDto.getAvailable() == null) {
             throw new ValidationException("Available not found");
