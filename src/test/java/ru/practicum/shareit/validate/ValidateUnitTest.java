@@ -107,7 +107,7 @@ class ValidateUnitTest {
         itemDto.setAvailable(true);
         itemDto.setName("");
         assertThrows(ValidationException.class, () -> validate.validateItemDto(itemDto));
-        itemDto.setName("");
+        itemDto.setName("Anna");
         itemDto.setDescription("");
         assertThrows(ValidationException.class, () -> validate.validateItemDto(itemDto));
 
@@ -133,14 +133,24 @@ class ValidateUnitTest {
 
     @Test
     void validateBookingAvailable() {
+        ArrayList<Booking> arrayListB = new ArrayList<>();
+        arrayListB.add(new Booking());
         when(itemRepository.getById(any())).thenReturn(item);
 
         assertThrows(ValidationException.class, () -> validate.validateBookingAvailable(booking));
 
-//        item.setAvailable(true);
-//        when(bookingRepository.getByItemIdAndTime(any(), any(), any())).thenReturn(new ArrayList<>());
-//
-//        assertThrows(NotFoundException.class, () -> validate.validateBookingAvailable(booking));
+        item.setAvailable(true);
+        when(bookingRepository.getByItemIdAndTime(1, booking.getStart(), booking.getEnd())).thenReturn(arrayListB);
+
+        assertThrows(NotFoundException.class, () -> validate.validateBookingAvailable(booking));
+
+        when(bookingRepository.getByItemIdAndTime(1, booking.getStart(), booking.getEnd())).thenReturn(new ArrayList<>());
+        item.setOwnerId(1);
+        booking.setBookerId(1);
+
+        assertThrows(NotFoundException.class, () -> validate.validateBookingAvailable(booking));
+
+
     }
 
     @Test
