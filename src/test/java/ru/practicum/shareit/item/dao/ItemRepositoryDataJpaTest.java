@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.dao;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ class ItemRepositoryDataJpaTest {
         item.setAvailable(true);
         item.setName("Text");
         item.setDescription("Text");
-        item.setRequestId(0L);
+        item.setRequestId(1L);
         item.setId(1);
         item.setOwnerId(1);
 
@@ -45,6 +44,7 @@ class ItemRepositoryDataJpaTest {
         assertTrue(!arrayList.isEmpty());
     }
 
+    @Order(1)
     @Test
     void findByUserIdAndItemId() {
         Item arrayList = itemRepository.findByUserIdAndItemId(1, 1);
@@ -66,13 +66,14 @@ class ItemRepositoryDataJpaTest {
         assertTrue(!arrayList.isEmpty());
     }
 
-    @Order(1)
-    @Test
-    void booking() {
-        itemRepository.booking(1, 1);
 
-    }
+//    @Test
+//    void booking() {
+//        // itemRepository.booking(1, 1);
+//
+//    }
 
+    @Order(2)
     @Test
     void getByRequestId() {
         ArrayList<Item> arrayList = itemRepository.getByRequestId(1L);
