@@ -21,20 +21,22 @@ class CommentMapperTest {
     private Comment comment;
 
     private CommentDto commentDto;
+    private LocalDateTime localDateTime;
 
     @BeforeEach
     void setUp() {
+        localDateTime = LocalDateTime.now();
         comment = new Comment();
         comment.setText("Text");
         comment.setItemId(1);
         comment.setAuthorName("Text");
-        comment.setCreated(LocalDateTime.now());
+        comment.setCreated(localDateTime);
         comment.setId(1);
 
         commentDto = new CommentDto();
         commentDto.setText("Text");
         commentDto.setAuthorName("Text");
-        commentDto.setCreated(LocalDateTime.now());
+        commentDto.setCreated(localDateTime);
         commentDto.setId(1);
     }
 
