@@ -9,6 +9,7 @@ import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
+import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.validate.Validate;
@@ -131,6 +132,7 @@ class BookingServiceImplUnitTest {
         assertEquals(bdtArrFUTURE, bookingDtoArrayList);
         assertEquals(bdtArrWAITING, bookingDtoArrayList);
         assertEquals(bdtArrREJECTED, bookingDtoArrayList);
+        assertThrows(ValidationException.class, () -> bookingService.getBookingsUserAll("lol", 0, 1, 1));
     }
 
     @Test
@@ -150,5 +152,6 @@ class BookingServiceImplUnitTest {
         assertEquals(bdtArrFUTURE, bookingDtoArrayList);
         assertEquals(bdtArrWAITING, bookingDtoArrayList);
         assertEquals(bdtArrREJECTED, bookingDtoArrayList);
+        assertThrows(ValidationException.class, () -> bookingService.getBookingsOwnerAll("lol", 0, 1, 1));
     }
 }
