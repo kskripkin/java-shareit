@@ -138,7 +138,7 @@ public class Validate {
 
     public void validateItemRequestsId(long requestId) {
         if (!itemRequestRepository.findById(requestId).isEmpty()) {
-            throw new NotFoundException("NotFound");
+            throw new NotFoundException("ItemRequest NotFound");
         }
     }
 

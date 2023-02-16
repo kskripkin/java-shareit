@@ -66,13 +66,6 @@ class ItemRepositoryDataJpaTest {
         assertTrue(!arrayList.isEmpty());
     }
 
-
-//    @Test
-//    void booking() {
-//        // itemRepository.booking(1, 1);
-//
-//    }
-
     @Order(2)
     @Test
     void getByRequestId() {

@@ -40,8 +40,8 @@ public class ItemMapper {
                     item.getName(),
                     item.getDescription(),
                     item.getAvailable(),
-                    null,
-                    null,
+                    new LastBooking(),
+                    new NextBooking(),
                     commentsRepository.getByItemId(item.getId()),
                     item.getRequestId()
             );
@@ -52,7 +52,7 @@ public class ItemMapper {
                     item.getDescription(),
                     item.getAvailable(),
                     new LastBooking(bookingLast.getId(), bookingLast.getBookerId()),
-                    null,
+                    new NextBooking(),
                     commentsRepository.getByItemId(item.getId()),
                     item.getRequestId()
             );
@@ -62,7 +62,7 @@ public class ItemMapper {
                     item.getName(),
                     item.getDescription(),
                     item.getAvailable(),
-                    null,
+                    new LastBooking(),
                     new NextBooking(bookingNext.getId(), bookingNext.getBookerId()),
                     commentsRepository.getByItemId(item.getId()),
                     item.getRequestId()

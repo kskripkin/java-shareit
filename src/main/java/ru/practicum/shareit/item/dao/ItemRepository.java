@@ -28,12 +28,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "from items ", nativeQuery = true)
     List<Item> getAll();
 
-//    @Modifying
-//    @Query(value = "update items " +
-//            "set request_booking_id = ?1 " +
-//            "where id = ?2", nativeQuery = true)
-//    void booking(long bookId, long itemId);
-
     @Query(value = "select * " +
             "from items " +
             "where request_id = ?1", nativeQuery = true)
