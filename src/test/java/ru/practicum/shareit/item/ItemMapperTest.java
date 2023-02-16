@@ -99,12 +99,12 @@ class ItemMapperTest {
 
         when(bookingRepository.getByItemIdLast(1, localDateTime, 1)).thenReturn(null);
         when(bookingRepository.getByItemIdNext(1, localDateTime, 1)).thenReturn(null);
-        itemDto.setNextBooking(null);
-        itemDto.setLastBooking(null);
+        itemDto.setNextBooking(new NextBooking());
+        itemDto.setLastBooking(new LastBooking());
 
         assertEquals(itemMapper.toItemDto(1, item), itemDto);
 
-        itemDto.setNextBooking(null);
+        itemDto.setNextBooking(new NextBooking());
         itemDto.setLastBooking(lastBooking);
         when(bookingRepository.getByItemIdLast(1, localDateTime, 1)).thenReturn(bookingOne);
         when(bookingRepository.getByItemIdNext(1, localDateTime, 1)).thenReturn(null);
@@ -112,7 +112,7 @@ class ItemMapperTest {
         assertEquals(itemMapper.toItemDto(1, item), itemDto);
 
         itemDto.setNextBooking(nextBooking);
-        itemDto.setLastBooking(null);
+        itemDto.setLastBooking(new LastBooking());
         when(bookingRepository.getByItemIdLast(1, localDateTime, 1)).thenReturn(null);
         when(bookingRepository.getByItemIdNext(1, localDateTime, 1)).thenReturn(bookingOne);
 
