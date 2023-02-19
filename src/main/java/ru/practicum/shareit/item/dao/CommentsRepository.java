@@ -18,9 +18,4 @@ public interface CommentsRepository extends JpaRepository<Comment, Long> {
             "where item_id = ?1 ", nativeQuery = true)
     ArrayList<Comment> getByItemId(long itemId);
 
-    @Query(value = "select * " +
-            "from comments " +
-            "where id = ?1 ", nativeQuery = true)
-    Collection<Comment> getById(long id);
-
 }

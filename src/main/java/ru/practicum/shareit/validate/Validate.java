@@ -11,7 +11,8 @@ import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -24,6 +25,8 @@ public class Validate {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
+
+    private final ItemRequestRepository itemRequestRepository;
 
     public void validateCreateUser(User user) {
         if (user.getEmail() == null || !EmailValidator.getInstance().isValid(user.getEmail())) {
@@ -46,18 +49,6 @@ public class Validate {
     public void validateShowItem(long id) {
         if (itemRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Item not found");
-        }
-    }
-
-    public void validateItem(Item item) {
-        if (item.getAvailable() == null) {
-            throw new ValidationException("Available not found");
-        }
-        if (item.getName() == "") {
-            throw new ValidationException("Name is empty");
-        }
-        if (item.getDescription() == "" || item.getDescription() == null) {
-            throw new ValidationException("Description is empty");
         }
     }
 
@@ -136,6 +127,24 @@ public class Validate {
     public void validateComment(long userId, Comment comment) {
         if (comment.getText().equals("")) {
             throw new ValidationException("Text comment not maybe empty");
+        }
+    }
+
+    public void validateItemRequests(ItemRequest itemRequest) {
+        if (itemRequest.getDescription() == "" || itemRequest.getDescription() == null) {
+            throw new ValidationException("Description is empty");
+        }
+    }
+
+    public void validateItemRequestsId(long requestId) {
+        if (!itemRequestRepository.findById(requestId).isEmpty()) {
+            throw new NotFoundException("ItemRequest NotFound");
+        }
+    }
+
+    public void paginationFrom(Integer from) {
+        if (from < 0) {
+            throw new ValidationException("From < 0");
         }
     }
 }

@@ -33,16 +33,4 @@ public class BookingMapper {
         Stream<Booking> bookingStream = booking.stream();
         return bookingStream.map(x -> toBookingDto(x)).collect(Collectors.toList());
     }
-
-    public Booking toBooking(BookingDto bookingDto) {
-        return new Booking(
-                bookingDto.getId(),
-                bookingDto.getStart(),
-                bookingDto.getEnd(),
-                bookingDto.getItem().getId(),
-                bookingDto.getBooker().getId(),
-                bookingDto.getStatus(),
-                bookingDto.getItem().getName()
-        );
-    }
 }

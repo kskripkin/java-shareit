@@ -28,9 +28,19 @@ public class Item {
     @Column(name = "owner_id", nullable = false)
     private long ownerId;
 
+    @Column(name = "request_id", nullable = false)
+    private Long requestId;
+
     public Item(String name, String description, Boolean available) {
         this.name = name;
         this.description = description;
         this.available = available;
+    }
+
+    public Item(String name, String description, Boolean available, Long requestId) {
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.requestId = requestId;
     }
 }

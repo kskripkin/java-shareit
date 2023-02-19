@@ -35,14 +35,20 @@ public class BookingController {
     }
 
     @GetMapping
-    public Collection<BookingDto> getBookingsUserAll(@RequestParam(required = false, defaultValue = "ALL") String state, @RequestHeader("X-Sharer-User-Id") long userId) {
-        log.info("GET /bookings?state={} X-Sharer-User-Id={}", state, userId);
-        return bookingService.getBookingsUserAll(state, userId);
+    public Collection<BookingDto> getBookingsUserAll(@RequestParam(required = false, defaultValue = "ALL") String state,
+                                                     @RequestParam(required = false, defaultValue = "0") Integer from,
+                                                     @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                     @RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("GET /bookings?from={}&size={}&state={} X-Sharer-User-Id={}", from, size, state, userId);
+        return bookingService.getBookingsUserAll(state, from, size, userId);
     }
 
     @GetMapping("/owner")
-    public Collection<BookingDto> getBookingsOwnerAll(@RequestParam(required = false, defaultValue = "ALL") String state, @RequestHeader("X-Sharer-User-Id") long userId) {
-        log.info("GET /bookings/owner?state={} X-Sharer-User-Id={}", state, userId);
-        return bookingService.getBookingsOwnerAll(state, userId);
+    public Collection<BookingDto> getBookingsOwnerAll(@RequestParam(required = false, defaultValue = "ALL") String state,
+                                                      @RequestParam(required = false, defaultValue = "0") Integer from,
+                                                      @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                      @RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("GET /bookings/owner?from={}&size={}&state={} X-Sharer-User-Id={}", from, size, state, userId);
+        return bookingService.getBookingsOwnerAll(state, from, size, userId);
     }
 }
