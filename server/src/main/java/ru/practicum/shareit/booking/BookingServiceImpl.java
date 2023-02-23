@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
+import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
 
 import java.time.LocalDateTime;
@@ -61,8 +62,7 @@ public class BookingServiceImpl implements BookingService {
             case "REJECTED":
                 return bookingMapper.manyToBookingDto(bookingRepository.getByBookerIdAndStatus(userId, state, PageRequest.of((from / size), size)));
             default:
-                System.out.println("Статус не найден");
-                return null;
+                throw new ValidationException("Unknown state: " + state);
         }
     }
 
@@ -84,8 +84,7 @@ public class BookingServiceImpl implements BookingService {
             case "REJECTED":
                 return bookingMapper.manyToBookingDto(bookingRepository.getByOwnerIdAndStatus(userId, state, PageRequest.of((from / size), size)));
             default:
-                System.out.println("Статус не найден");
-                return null;
+                throw new ValidationException("Unknown state: " + state);
         }
     }
 }
