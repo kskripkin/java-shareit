@@ -1,61 +1,46 @@
 package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
-import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.validate.Validate;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ItemRequestServiceImpl implements ItemRequestService {
 
-    private final ItemRequestRepository itemRequestRepository;
 
     private final Validate validate;
 
-    private final ItemRequestMapper itemRequestMapper;
+    private final ItemRequestClient itemRequestClient;
+
 
     @Override
-    public ItemRequestDto addRequest(ItemRequest itemRequest, long userId) {
-        validate.validate(userId);
-        validate.validateItemRequests(itemRequest);
-        itemRequest.setRequesterId(userId);
-        itemRequest.setCreated(LocalDateTime.now());
-        return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.save(itemRequest));
+    public ResponseEntity<Object> addRequest(ItemRequestDto itemRequestDto, long userId) {
+        validate.validateLong(userId);
+        validate.validateItemRequests(itemRequestDto);
+        return itemRequestClient.saveItemRequest(userId, itemRequestDto);
     }
 
     @Override
-    public Collection<ItemRequestDto> getRequests(long userId) {
-        validate.validate(userId);
-        return itemRequestRepository.getItemRequests().stream()
-                .map(itemRequestMapper::itemRequestToItemRequestDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<Object> getRequests(long userId) {
+        validate.validateLong(userId);
+        return itemRequestClient.getItemRequests(userId);
     }
 
     @Override
-    public List<ItemRequestDto> getRequestsAll(int from, int size, long userId) {
-        validate.validate(userId);
+    public ResponseEntity<Object> getRequestsAll(int from, int size, long userId) {
+        validate.validateLong(userId);
         validate.paginationFrom(from);
-        return itemRequestRepository.findByRequesterId(userId, PageRequest
-                .of((from / size), size, Sort.by("created").descending()))
-                .stream()
-                .map(itemRequestMapper::itemRequestToItemRequestDto)
-                .collect(Collectors.toList());
+        validate.paginationFrom(size);
+        return itemRequestClient.findByRequesterId(userId, size, from);
     }
 
     @Override
-    public ItemRequestDto getRequestOne(long requestId, long userId) {
-        validate.validate(userId);
-        validate.validateItemRequestsId(requestId);
-        return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.getRequestOne(requestId));
+    public ResponseEntity<Object> getRequestOne(long requestId, long userId) {
+        validate.validateLong(userId);
+        validate.validateLong(requestId);
+        return itemRequestClient.getRequestOne(userId, requestId);
     }
 }

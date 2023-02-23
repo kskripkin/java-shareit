@@ -1,18 +1,15 @@
 package ru.practicum.shareit.request;
 
+import org.springframework.http.ResponseEntity;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
-import ru.practicum.shareit.request.model.ItemRequest;
-
-import java.util.Collection;
-import java.util.List;
 
 public interface ItemRequestService {
 
-    ItemRequestDto addRequest(ItemRequest itemRequest, long userId);
+    ResponseEntity<Object> addRequest(ItemRequestDto itemRequestDto, long userId);
 
-    Collection<ItemRequestDto> getRequests(long userId);
+    ResponseEntity<Object> getRequests(long userId);
 
-    List<ItemRequestDto> getRequestsAll(int from, int size, long userId);
+    ResponseEntity<Object> getRequestsAll(int from, int size, long userId);
 
-    ItemRequestDto getRequestOne(long requestId, long user);
+    ResponseEntity<Object> getRequestOne(long requestId, long user);
 }

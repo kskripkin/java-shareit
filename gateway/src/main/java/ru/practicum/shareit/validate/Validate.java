@@ -7,7 +7,7 @@ import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.model.User;
 
 @RequiredArgsConstructor
@@ -65,7 +65,7 @@ public class Validate {
         }
     }
 
-    public void validateItemRequests(ItemRequest itemRequest) {
+    public void validateItemRequests(ItemRequestDto itemRequest) {
         if (itemRequest.getDescription() == "" || itemRequest.getDescription() == null) {
             throw new ValidationException("Description is empty");
         }

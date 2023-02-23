@@ -50,15 +50,21 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> findByText(long userId, String text) {
-        return get("/search?text={}" + text, userId);
+        return get("/search?text=" + text, userId);
     }
 
     public ResponseEntity<Object> getCommentByItemId(long userId, long itemId) {
-        return get("/{}/comment" + itemId, userId);
+        Map<String, Object> parameters = Map.of(
+                "itemId", itemId
+        );
+        return get("/{itemId}/comment", userId, parameters);
     }
 
     public ResponseEntity<Object> saveComment(long userId, long itemId, CommentDto commentDto) {
-        return post("/{}/comment" + itemId, userId, commentDto);
+        Map<String, Object> parameters = Map.of(
+                "itemId", itemId
+        );
+        return post("/{itemId}/comment", userId, parameters, commentDto);
     }
 
 }
