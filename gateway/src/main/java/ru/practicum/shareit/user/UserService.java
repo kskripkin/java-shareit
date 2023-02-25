@@ -3,8 +3,6 @@ package ru.practicum.shareit.user;
 import org.springframework.http.ResponseEntity;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.Collection;
-
 public interface UserService {
 
     ResponseEntity<Object> getUser(long id);

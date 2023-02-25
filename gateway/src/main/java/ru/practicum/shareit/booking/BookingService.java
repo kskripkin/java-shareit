@@ -4,8 +4,6 @@ import org.springframework.http.ResponseEntity;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.BookingState;
 
-import java.util.Collection;
-
 public interface BookingService {
 
     ResponseEntity<Object> booking(long userId, BookingDto bookingDto);

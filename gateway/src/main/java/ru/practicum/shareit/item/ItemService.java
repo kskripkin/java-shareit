@@ -4,8 +4,6 @@ import org.springframework.http.ResponseEntity;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import java.util.Collection;
-
 public interface ItemService {
 
     ResponseEntity<Object> addItem(long userId, ItemDto itemDto);
