@@ -29,7 +29,7 @@ public class ItemServiceImpl implements ItemService {
         validate.validateLong(userId);
         validate.validateLong(itemId);
         itemDto.setId(itemId);
-        return itemClient.saveItem(userId, itemDto);
+        return itemClient.updateItem(userId, itemId, itemDto);
     }
 
     @Override

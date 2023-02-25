@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserRepository;
+import ru.practicum.shareit.validate.Validate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,11 +28,13 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
     private final CommentMapper commentMapper;
     private Item item;
+    private final Validate validate;
 
     @Override
     public ItemDto addItem(long userId, ItemDto itemDto) {
         item = itemMapper.toItem(itemDto);
         item.setOwnerId(userId);
+        validate.validate(userId);
         if (itemDto.getRequestId() == null) {
             item.setRequestId(0L);
         }
@@ -40,7 +43,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto editItem(long userId, ItemDto itemDto, long itemId) {
+        validate.validate(userId);
         item = itemMapper.toItem(itemDto);
+        validate.validateUserOwnItem(userId, itemId);
         item.setId(itemId);
         Item itemSource = itemRepository.getById(itemId);
         item.setOwnerId(itemSource.getOwnerId());
@@ -61,6 +66,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto showItem(long userId, long itemId) {
+        validate.validateShowItem(itemId);
         return itemMapper.toItemDto(userId, itemRepository.getById(itemId));
     }
 
@@ -72,6 +78,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemDto> searchItems(long userId, String text) {
+        validate.validate(userId);
         if (text.equals("")) {
             return new ArrayList<>();
         }
@@ -81,6 +88,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<CommentDto> getComments(long userId, long itemId) {
+        validate.validate(userId);
         Stream<Comment> streamComment = commentsRepository.getByItemId(itemId).stream();
         return streamComment.map(x -> commentMapper.commentToCommentDto(x)).collect(Collectors.toList());
     }
@@ -90,6 +98,9 @@ public class ItemServiceImpl implements ItemService {
         comment.setCreated(LocalDateTime.now());
         comment.setAuthorName(userRepository.getById(userId).getName());
         comment.setItemId(itemId);
+        validate.validate(userId);
+        validate.validateUserBookingItem(userId, itemId);
+        validate.validateBookingLastTime(userId, itemId);
         return commentMapper.commentToCommentDto(commentsRepository.save(comment));
     }
 }

@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.exception.model.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepository;
+import ru.practicum.shareit.validate.Validate;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -21,18 +22,31 @@ public class BookingServiceImpl implements BookingService {
 
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
+    private final Validate validate;
     private final BookingMapper bookingMapper;
 
     @Override
     public BookingDto bookingApproveOrDeclined(long bookingId, boolean status, long userId) {
+        validate.validate(userId);
+        validate.booking(bookingId);
+        validate.validateUserOwnItem(userId, bookingRepository.getById(bookingId).getItemId());
         Booking booking = bookingRepository.getById(bookingId);
+        validate.validateApproveStatus(booking.getStatus());
+        if (status) {
+            booking.setStatus(BookingState.APPROVED);
+        } else {
+            booking.setStatus(BookingState.REJECTED);
+        }
         bookingRepository.save(booking);
         return bookingMapper.toBookingDto(booking);
     }
 
     @Override
     public BookingDto booking(long userId, Booking booking) {
+        validate.validate(userId);
+        validate.validateShowItem(booking.getItemId());
         booking.setBookerId(userId);
+        validate.validateBookingAvailable(booking);
         booking.setStatus(BookingState.WAITING);
         booking.setItemName(itemRepository.getById(booking.getItemId()).getName());
         Booking bookingFinal = bookingRepository.save(booking);
@@ -41,11 +55,15 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto getBooking(long bookingId, long userId) {
+        validate.validate(userId);
+        validate.booking(bookingId);
+        validate.validateUserOwnItemOrBooker(bookingId, userId);
         return bookingMapper.toBookingDto(bookingRepository.getById(bookingId));
     }
 
     @Override
     public Collection<BookingDto> getBookingsUserAll(String state, Integer from, Integer size, long userId) {
+        validate.validate(userId);
         LocalDateTime ldt = LocalDateTime.now();
         switch (state) {
             case "ALL":
@@ -68,6 +86,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Collection<BookingDto> getBookingsOwnerAll(String state, Integer from, Integer size, long userId) {
+        validate.validate(userId);
         LocalDateTime ldt = LocalDateTime.now();
         switch (state) {
             case "ALL":

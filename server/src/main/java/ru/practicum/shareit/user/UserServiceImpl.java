@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.validate.Validate;
 
 import java.util.Collection;
 
@@ -12,9 +13,11 @@ import java.util.Collection;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final Validate validate;
 
     @Override
     public User getUser(long id) {
+        validate.validate(id);
         return userRepository.getById(id);
     }
 
@@ -43,6 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(long id) {
+        validate.validate(id);
         userRepository.deleteById(id);
     }
 }

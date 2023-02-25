@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.validate.Validate;
 
 @Slf4j
@@ -26,6 +25,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public ResponseEntity<Object> booking(long userId, BookingDto bookingDto) {
         validate.validateLong(userId);
+        validate.bookingTime(bookingDto);
         return bookingClient.bookItem(userId, bookingDto);
     }
 
@@ -37,13 +37,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public ResponseEntity<Object> getBookingsUserAll(BookingState state, Integer from, Integer size, long userId) {
+    public ResponseEntity<Object> getBookingsUserAll(String state, Integer from, Integer size, long userId) {
         validate.paginationFrom(from);
         return bookingClient.getBookings(userId, state, from, size);
     }
 
     @Override
-    public ResponseEntity<Object> getBookingsOwnerAll(BookingState state, Integer from, Integer size, long userId) {
+    public ResponseEntity<Object> getBookingsOwnerAll(String state, Integer from, Integer size, long userId) {
         validate.paginationFrom(from);
         return bookingClient.getBookingsByOwner(userId, state, from, size);
     }

@@ -68,15 +68,6 @@ public class Validate {
         }
     }
 
-    public void bookingTime(Booking booking) {
-        if (booking.getEnd().isBefore(booking.getStart())) {
-            throw new ValidationException("End time before start time");
-        }
-        if (booking.getEnd().isBefore(LocalDateTime.now()) || booking.getStart().isBefore(LocalDateTime.now().minusMinutes(1))) {
-            throw new ValidationException("End or start time before now");
-        }
-    }
-
     public void validateApproveStatus(BookingState status) {
         if (status == BookingState.APPROVED) {
             throw new ValidationException("Status has already been APPROVED");

@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking;
 
 import org.springframework.http.ResponseEntity;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.model.BookingState;
 
 public interface BookingService {
 
@@ -12,7 +11,7 @@ public interface BookingService {
 
     ResponseEntity<Object> getBooking(long bookingId, long userId);
 
-    ResponseEntity<Object> getBookingsUserAll(BookingState state, Integer from, Integer size, long userId);
+    ResponseEntity<Object> getBookingsUserAll(String state, Integer from, Integer size, long userId);
 
-    ResponseEntity<Object> getBookingsOwnerAll(BookingState state, Integer from, Integer size, long userId);
+    ResponseEntity<Object> getBookingsOwnerAll(String state, Integer from, Integer size, long userId);
 }

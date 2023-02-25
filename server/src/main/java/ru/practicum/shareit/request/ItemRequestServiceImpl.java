@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.validate.Validate;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -19,10 +20,13 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final ItemRequestRepository itemRequestRepository;
 
+    private final Validate validate;
+
     private final ItemRequestMapper itemRequestMapper;
 
     @Override
     public ItemRequestDto addRequest(ItemRequest itemRequest, long userId) {
+        validate.validate(userId);
         itemRequest.setRequesterId(userId);
         itemRequest.setCreated(LocalDateTime.now());
         return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.save(itemRequest));
@@ -30,6 +34,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public Collection<ItemRequestDto> getRequests(long userId) {
+        validate.validate(userId);
         return itemRequestRepository.getItemRequests().stream()
                 .map(itemRequestMapper::itemRequestToItemRequestDto)
                 .collect(Collectors.toList());
@@ -37,8 +42,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDto> getRequestsAll(int from, int size, long userId) {
+        validate.validate(userId);
         return itemRequestRepository.findByRequesterId(userId, PageRequest
-                .of((from / size), size, Sort.by("created").descending()))
+                        .of((from / size), size, Sort.by("created").descending()))
                 .stream()
                 .map(itemRequestMapper::itemRequestToItemRequestDto)
                 .collect(Collectors.toList());
@@ -46,6 +52,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public ItemRequestDto getRequestOne(long requestId, long userId) {
+        validate.validate(userId);
+        validate.validateItemRequestsId(requestId);
         return itemRequestMapper.itemRequestToItemRequestDto(itemRequestRepository.getRequestOne(requestId));
     }
 }

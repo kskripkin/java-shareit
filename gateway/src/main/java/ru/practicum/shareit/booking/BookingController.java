@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.model.BookingState;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -24,22 +23,18 @@ public class BookingController {
 
 	@GetMapping
 	public ResponseEntity<Object> getBookingsUserAll(@RequestHeader("X-Sharer-User-Id") long userId,
-													 @RequestParam(name = "state", defaultValue = "all") String stateParam,
+													 @RequestParam(name = "state", defaultValue = "all") String state,
 													 @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
 													 @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-		BookingState state = BookingState.from(stateParam)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
 		log.info("GET /bookings?from={}&size={}&state={} X-Sharer-User-Id={}", from, size, state, userId);
 		return bookingService.getBookingsUserAll(state, from, size, userId);
 	}
 
 	@GetMapping("/owner")
 	public ResponseEntity<Object> getBookingsOwnerAll(@RequestHeader("X-Sharer-User-Id") long userId,
-													  @RequestParam(name = "state", defaultValue = "all") String stateParam,
+													  @RequestParam(name = "state", defaultValue = "all") String state,
 													  @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
 													  @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-		BookingState state = BookingState.from(stateParam)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
 		log.info("GET /bookings/owner?from={}&size={}&state={} X-Sharer-User-Id={}", from, size, state, userId);
 		return bookingService.getBookingsOwnerAll(state, from, size, userId);
 	}
