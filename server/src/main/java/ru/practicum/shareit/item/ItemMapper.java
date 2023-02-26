@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.config.ConfigDateTime;
 import ru.practicum.shareit.booking.dao.BookingRepository;
@@ -11,6 +12,7 @@ import ru.practicum.shareit.item.dto.LastBooking;
 import ru.practicum.shareit.item.dto.NextBooking;
 import ru.practicum.shareit.item.model.Item;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemMapper {
@@ -22,6 +24,11 @@ public class ItemMapper {
     public ItemDto toItemDto(long userId, Item item) {
         Booking bookingLast = bookingRepository.getByItemIdLast(item.getId(), configDateTime.getLocalDateTime(), userId);
         Booking bookingNext = bookingRepository.getByItemIdNext(item.getId(), configDateTime.getLocalDateTime(), userId);
+
+        log.info("bookingLast == {}", bookingLast);
+        log.info("bookingNext == {}", bookingNext);
+        log.info("userId == {}, item == {}", userId, item);
+
         if (bookingLast != null && bookingNext != null) {
             return new ItemDto(
                     item.getId(),
