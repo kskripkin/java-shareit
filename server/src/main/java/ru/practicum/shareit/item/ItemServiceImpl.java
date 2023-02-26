@@ -3,14 +3,12 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.item.dao.CommentsRepository;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.validate.Validate;
 
@@ -29,8 +27,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CommentsRepository commentsRepository;
     private final UserRepository userRepository;
-    private final ItemRequestRepository itemRequestRepository;
-    private final BookingRepository bookingRepository;
     private final ItemMapper itemMapper;
     private final CommentMapper commentMapper;
     private Item item;
@@ -78,11 +74,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemDto> showItems(long userId) {
-        log.info("itemRepository.getAll == {}", itemRepository.getAll());
-        log.info("commentsRepository.getAll == {}", commentsRepository.getAll());
-        log.info("userRepository.getAll == {}", userRepository.getAll());
-        log.info("itemRequestRepository.getItemRequests == {}", itemRequestRepository.getItemRequests());
-        log.info("bookingRepository.getAll == {}", bookingRepository.getAll());
         Stream<Item> itemStream = itemRepository.findItemsByUserId(userId).stream();
         return itemStream.map(x -> itemMapper.toItemDto(userId, x)).collect(Collectors.toList());
     }

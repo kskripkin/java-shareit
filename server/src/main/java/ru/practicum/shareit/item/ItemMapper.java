@@ -24,11 +24,6 @@ public class ItemMapper {
     public ItemDto toItemDto(long userId, Item item) {
         Booking bookingLast = bookingRepository.getByItemIdLast(item.getId(), configDateTime.getLocalDateTime(), userId);
         Booking bookingNext = bookingRepository.getByItemIdNext(item.getId(), configDateTime.getLocalDateTime(), userId);
-
-        log.info("bookingLast == {}", bookingLast);
-        log.info("bookingNext == {}", bookingNext);
-        log.info("userId == {}, item == {}", userId, item);
-
         if (bookingLast != null && bookingNext != null) {
             return new ItemDto(
                     item.getId(),
