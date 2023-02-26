@@ -11,7 +11,6 @@ import ru.practicum.shareit.item.dto.LastBooking;
 import ru.practicum.shareit.item.dto.NextBooking;
 import ru.practicum.shareit.item.model.Item;
 
-
 @Service
 @RequiredArgsConstructor
 public class ItemMapper {

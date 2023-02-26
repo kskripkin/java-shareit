@@ -1,6 +1,7 @@
 package ru.practicum.shareit.validate;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.model.Booking;
@@ -13,6 +14,7 @@ import ru.practicum.shareit.user.dao.UserRepository;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class Validate {
@@ -30,6 +32,8 @@ public class Validate {
     }
 
     public void validateShowItem(long id) {
+        log.info("itemId {} ", id);
+        log.info("{} ",itemRepository.getAll());
         if (itemRepository.findById(id).isEmpty()) {
             throw new NotFoundException("Item not found");
         }

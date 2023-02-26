@@ -40,7 +40,7 @@ public class BookingController {
                                                      @RequestParam(required = false, defaultValue = "10") Integer size,
                                                      @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("GET /bookings?from={}&size={}&state={} X-Sharer-User-Id={}", from, size, state, userId);
-        return bookingService.getBookingsUserAll(state, from, size, userId);
+        return bookingService.getBookingsUserAll(state.toUpperCase(), from, size, userId);
     }
 
     @GetMapping("/owner")
@@ -49,6 +49,6 @@ public class BookingController {
                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
                                                       @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("GET /bookings/owner?from={}&size={}&state={} X-Sharer-User-Id={}", from, size, state, userId);
-        return bookingService.getBookingsOwnerAll(state, from, size, userId);
+        return bookingService.getBookingsOwnerAll(state.toUpperCase(), from, size, userId);
     }
 }

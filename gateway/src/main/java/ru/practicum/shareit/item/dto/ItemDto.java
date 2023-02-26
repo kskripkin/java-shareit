@@ -3,6 +3,8 @@ package ru.practicum.shareit.item.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Data
 @NoArgsConstructor
 public class ItemDto {
@@ -19,7 +21,7 @@ public class ItemDto {
 
     private NextBooking nextBooking;
 
-    //private ArrayList<Comment> comments;
+    private ArrayList<CommentDto> comments;
 
     private Long requestId;
 
@@ -43,6 +45,17 @@ public class ItemDto {
         this.available = available;
         this.lastBooking = lastBooking;
         this.nextBooking = nextBooking;
+        this.requestId = requestId;
+    }
+
+    public ItemDto(long id, String name, String description, Boolean available, LastBooking lastBooking, NextBooking nextBooking, ArrayList<CommentDto> comments, Long requestId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+        this.lastBooking = lastBooking;
+        this.nextBooking = nextBooking;
+        this.comments = comments;
         this.requestId = requestId;
     }
 }

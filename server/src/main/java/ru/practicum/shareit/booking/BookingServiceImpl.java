@@ -43,6 +43,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto booking(long userId, Booking booking) {
+        log.info("iserId = {}, booking = {}", userId, booking);
         validate.validate(userId);
         validate.validateShowItem(booking.getItemId());
         booking.setBookerId(userId);
