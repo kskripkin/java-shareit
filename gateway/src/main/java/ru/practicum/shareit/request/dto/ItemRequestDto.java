@@ -16,14 +16,4 @@ public class ItemRequestDto {
     private Long requesterId;
 
     private LocalDateTime created;
-
-//    private ArrayList<Item> items;
-
-
-    public ItemRequestDto(long id, String description, Long requesterId, LocalDateTime created) {
-        this.id = id;
-        this.description = description;
-        this.requesterId = requesterId;
-        this.created = created;
-    }
 }
